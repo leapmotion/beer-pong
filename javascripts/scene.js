@@ -40,15 +40,19 @@
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    return renderer.render(scene, camera);
+    controls.handleResize();
+    renderer.render(scene, camera);
   }, false);
 
   scene.add(camera);
 
+  controls = new THREE.TrackballControls( camera );
+
+
 
 
   scene.table = new THREE.Mesh(
-    new THREE.CubeGeometry(60, 30, 150),
+    new THREE.CubeGeometry(50, 30, 150),
     new THREE.MeshPhongMaterial({
       color: 0x007722
     })
@@ -128,9 +132,10 @@
 
   var render = function() {
     cameraCube.rotation.copy( camera.rotation );
+    controls.update();
     renderer.render(sceneCube, cameraCube);
     renderer.render(scene, camera);
-    return requestAnimationFrame(render);
+    requestAnimationFrame(render);
   };
 
   render();
