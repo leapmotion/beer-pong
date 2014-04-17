@@ -49,7 +49,7 @@
 
 
   scene.table = new THREE.Mesh(
-    new THREE.CubeGeometry(60, 30, 150),
+    new THREE.CubeGeometry(60, 3, 150),
     new THREE.MeshPhongMaterial({
       color: 0x007722
     })
