@@ -15,3 +15,8 @@ body{
 .debug {
     visibility: hidden;
 }
+
+#navbar {
+  position: relative;
+  z-index: 3;
+}
