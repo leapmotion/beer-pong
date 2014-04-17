@@ -9,6 +9,7 @@
   renderer.setClearColor(0x111111, 0);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.autoClear = false;
+  renderer.context.getProgramInfoLog = function () { return '' }; // fixed in three.js master, not in v66 yet
 
   renderer.domElement.style.position = 'fixed';
   renderer.domElement.style.top = 0;
