@@ -32,7 +32,7 @@
 
 /**
  * @library cannon.js
- * @version 0.4.3
+ * @version 0.4.3 -- note from peter: this may look like 0.4.3, but actually is master
  * @brief A lightweight 3D physics engine for the web
  */
 

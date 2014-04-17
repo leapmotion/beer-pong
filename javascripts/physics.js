@@ -15,14 +15,22 @@
   var sphereBody = new CANNON.RigidBody(mass,sphereShape);
   sphereBody.position.set(0,50,50);
   world.add(sphereBody);
+
+  sphereBody.velocity.set(0.05,0,0);
+  sphereBody.linearDamping = 0.0001
+
+  pongBall.physicsObject = sphereBody;
   physicsObjects.push({
     physicsObject: sphereBody,
     sceneObject: pongBall
-  })
+  });
 
   var groundShape = new CANNON.Plane();
-  var groundBody = new CANNON.RigidBody(0,groundShape);
+  window.groundBody = new CANNON.RigidBody(0,groundShape);
+
+
   groundBody.position.set(0,30,0);
+  groundBody.quaternion.setFromAxisAngle({x: 1,y:0,z:0}, Math.PI / 2)
   world.add(groundBody);
 
   // todo: add table

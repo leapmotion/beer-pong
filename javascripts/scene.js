@@ -155,10 +155,10 @@
         sceneObject.position.copy(physicsObject.position);
         // see https://github.com/schteppe/cannon.js/issues/133
         // sceneObject.quaternion.copy(physicsObject.quaternion);
-        sceneObject.quaternion._x = physicsObject.quaternion.x
-        sceneObject.quaternion._y = physicsObject.quaternion.y
-        sceneObject.quaternion._z = physicsObject.quaternion.z
-        sceneObject.quaternion._w = physicsObject.quaternion.w
+        sceneObject.quaternion._x = physicsObject.quaternion.x;
+        sceneObject.quaternion._y = physicsObject.quaternion.y;
+        sceneObject.quaternion._z = physicsObject.quaternion.z;
+        sceneObject.quaternion._w = physicsObject.quaternion.w;
       }
     }
 
