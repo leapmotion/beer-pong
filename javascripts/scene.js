@@ -1,6 +1,7 @@
 (function(){
   var pointLight;
 
+
   scene = new THREE.Scene();
   sceneCube = new THREE.Scene();
   renderer = new THREE.WebGLRenderer({alpha: false});
@@ -46,13 +47,13 @@
 
 
 
-  var table = new THREE.Mesh(
+  scene.table = new THREE.Mesh(
     new THREE.CubeGeometry(60, 30, 150),
     new THREE.MeshPhongMaterial({
-      color: 0x0000ff
+      color: 0x007722
     })
   );
-  scene.add(table);
+  scene.add(scene.table);
 
 
 
