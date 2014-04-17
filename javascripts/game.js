@@ -18,5 +18,7 @@
   Game.begin = function () {
     this.player1.resetCups()
     this.player2.resetCups()
+
+    window.render();
   }
 }).call(this);
