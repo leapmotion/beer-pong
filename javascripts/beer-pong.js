@@ -42,3 +42,9 @@ gui.add(x, 'gravity',1, 10).onChange(function(value) {
 });
 
 document.getElementById('hud').appendChild(gui.domElement);
+
+$(function() {
+    if (/debug/.test(window.location.href)) {
+        $('.debug').css('visibility', 'visible');
+    }
+});
