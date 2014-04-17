@@ -1,5 +1,5 @@
-module.exports = function(grunt) {
-  var filename =  "leap.playback-<%= pkg.version %>";
+module.exports = function (grunt) {
+  var filename = "leap.playback-<%= pkg.version %>";
   grunt.initConfig({
     pkg: grunt.file.readJSON("package.json"),
     watch: {
@@ -16,7 +16,7 @@ module.exports = function(grunt) {
       },
       css: {
         files: ['stylesheets/*'],
-        tasks: [],
+        tasks: ['sass'],
         options: {
           spawn: false,
           livereload: true
@@ -30,8 +30,21 @@ module.exports = function(grunt) {
           livereload: true
         }
       }
+    },
+    sass: {
+      build: {
+        files: [
+          {
+            expand: true,
+            cwd: 'stylesheets/',
+            src: ['*.scss'],
+            dest: 'stylesheets/',
+            ext: '.css'
+          }
+        ]
+      }
     }
   });
   require('load-grunt-tasks')(grunt);
-  return grunt.registerTask('default', []);
+  return grunt.registerTask('default', ['sass']);
 };

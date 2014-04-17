@@ -1,8 +1,8 @@
-body {
+body{
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-  font-size: 14px; }
-
-#hud {
+  font-size: 14px;
+}
+#hud{
   position: fixed;
   top: 0;
   left: 0;
@@ -10,17 +10,19 @@ body {
   color: #eee;
   min-width: 150px;
   padding: 10px;
-  z-index: 10; }
-
+  z-index: 10;
+}
 .debug {
-  visibility: hidden; }
+    visibility: hidden;
+}
 
 #navbar {
   position: relative;
-  z-index: 3; }
-
+  z-index: 3;
+}
 #navbar h1 {
   float: left;
-  -moz-text-shadow: 3px 3px 8px #fff;
-  -webkit-text-shadow: 3px 3px 8px #fff;
-  text-shadow: 3px 3px 8px #fff; }
+  -moz-text-shadow:3px 3px 8px #fff;
+  -webkit-text-shadow:3px 3px 8px #fff;
+  text-shadow:3px 3px 8px #fff;
+}
