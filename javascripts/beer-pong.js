@@ -17,3 +17,5 @@
       pongBall.position.copy(mesh.position);
     }
   });
+
+Game.begin()
