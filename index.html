@@ -1,45 +1,49 @@
 <!DOCTYPE HTML>
 <html>
-<head>
-  <title>Beer Pong</title>
+  <head>
+    <title>Beer Pong</title>
+    <link rel="stylesheet" href="stylesheets/main.css"/>
+    <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap.min.css"/>
+  </head>
+  <body>
+    <nav id="navbar" class="navbar avbar-default" role="navigation">
+          <h1>Beer Pong Dating <small>by Leap Motion</small></h1>
+      <p class="navbar-text navbar-right"><button href="#" data-login type="button" class="btn-default navbar-btn btn">Sign in via Facebook to invite your buddies</button></p>
+    </nav>
 
-  <link rel="stylesheet" href="stylesheets/main.css"/>
-  <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap.min.css"/>
-</head>
-<body>
+    <div id="hud" onmousedown="console.log('c');event.stopPropagation();" class="debug">
+      <!-- this should be angular: -->
+      <table>
+        <tr>
+          <td>palmPosition</td>
+          <td id="palmPosition"></td>
+        </tr>
+        <tr>
+          <td>ballPosition</td>
+          <td id="ballPosition"></td>
+        </tr>
+      </table>
+    </div>
 
-<div id="hud" onmousedown="console.log('c');event.stopPropagation();">
-  <!-- this should be angular: -->
-  <table>
-    <tr>
-      <td>palmPosition</td>
-      <td id="palmPosition"></td>
-    </tr>
-    <tr>
-      <td>ballPosition</td>
-      <td id="ballPosition"></td>
-    </tr>
-  </table>
-</div>
 
-<h1>Beer Pong</h1>
-
-<script type="text/javascript" src="javascripts/lib/three.js"></script>
-<script type="text/javascript" src="javascripts/lib/cannon.js"></script>
-<script type="text/javascript" src="javascripts/lib/dat.gui.js"></script>
-<!-- todo: replace these with something leap-enabled! -->
-<script type="text/javascript" src="javascripts/lib/TrackballControls.js"></script>
-
-<!-- todo: use skeletal beta2 -->
-<script type="text/javascript" src="javascripts/lib/leap-0.6.0-beta1.js"></script>
-<script src="//js.leapmotion.com/leap-plugins-0.1.4.js"></script>
-<script type="text/javascript" src="javascripts/lib/leap.rigged-hand-0.1.0.js"></script>
-<script type="text/javascript" src="javascripts/scene.js"></script>
-<script type="text/javascript" src="javascripts/physics.js"></script>
-<script type="text/javascript" src="javascripts/player.js"></script>
-<script type="text/javascript" src="javascripts/game.js"></script>
-<script type="text/javascript" src="javascripts/beer-pong.js"></script>
-<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
-<script type="text/javascript" src="bower_components/sass-bootstrap/dist/js/bootstrap.min.js"></script>
-</body>
+    <script type='text/javascript' src='https://cdn.firebase.com/js/client/1.0.11/firebase.js'></script>
+    <script type='text/javascript' src='https://cdn.firebase.com/js/simple-login/1.3.2/firebase-simple-login.js'></script>
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/lib/three.js"></script>
+    <script type="text/javascript" src="javascripts/lib/cannon.js"></script>
+    <script type="text/javascript" src="javascripts/lib/dat.gui.js"></script>
+    <!-- todo: replace these with something leap-enabled! -->
+    <script type="text/javascript" src="javascripts/lib/TrackballControls.js"></script>
+    <!-- todo: use skeletal beta2 -->
+    <script type="text/javascript" src="javascripts/lib/leap-0.6.0-beta1.js"></script>
+    <script src="//js.leapmotion.com/leap-plugins-0.1.4.js"></script>
+    <script type="text/javascript" src="javascripts/lib/leap.rigged-hand-0.1.0.js"></script>
+    <script type="text/javascript" src="javascripts/auth.js"></script>
+    <script type="text/javascript" src="javascripts/scene.js"></script>
+    <script type="text/javascript" src="javascripts/physics.js"></script>
+    <script type="text/javascript" src="javascripts/player.js"></script>
+    <script type="text/javascript" src="javascripts/game.js"></script>
+    <script type="text/javascript" src="javascripts/beer-pong.js"></script>
+    <script type="text/javascript" src="bower_components/sass-bootstrap/dist/js/bootstrap.min.js"></script>
+  </body>
 </html>

@@ -14,8 +14,16 @@ module.exports = function(grunt) {
           livereload: true
         }
       },
+      css: {
+        files: ['stylesheets/*'],
+        tasks: [],
+        options: {
+          spawn: false,
+          livereload: true
+        }
+      },
       html: {
-        files: ['index.html', 'textures/*.*'],
+        files: ['*.html', 'textures/*'],
         tasks: [],
         options: {
           spawn: false,

@@ -16,7 +16,8 @@
   renderer.domElement.style.left = 0;
   renderer.domElement.style.width = '100%';
   renderer.domElement.style.height = '100%';
-  document.body.appendChild(renderer.domElement);
+  renderer.domElement.style['z-index'] = 0;
+  $('body').prepend(renderer.domElement);
 //
 //  scene.add(new THREE.AmbientLight(0x888888));
 //
