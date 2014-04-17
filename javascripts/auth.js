@@ -8,7 +8,7 @@ var auth = new FirebaseSimpleLogin(firebase, function(error, user) {
     console.log(error);
   } else if (user) {
     console.log(user);
-    $navbar.find('.navbar-link').html('<a href="#" class="navbar-link">Signed in as ' + user.displayName + '</a> (<a href="#" data-logout>Sign out</a>)')
+    $navbar.find('.navbar-text').html('Signed in as ' + user.displayName + ' (<a href="#" data-logout>Sign out</a>)')
     $('[data-logout]').click(function() {
       auth.logout();
       window.location.reload();
