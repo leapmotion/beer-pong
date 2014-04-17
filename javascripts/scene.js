@@ -9,6 +9,7 @@
   renderer.setClearColor(0x111111, 0);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.autoClear = false;
+  renderer.context.getProgramInfoLog = function () { return '' }; // fixed in three.js master, not in v66 yet
 
   renderer.domElement.style.position = 'fixed';
   renderer.domElement.style.top = 0;
@@ -24,7 +25,7 @@
 //  pointLight.lookAt(new THREE.Vector3(0, 0, 0));
 //  scene.add(pointLight);
 
-  directionalLight = new THREE.DirectionalLight(0xcccccc);
+  directionalLight = new THREE.DirectionalLight(0xffffff);
   directionalLight.position.set( 0, 1, 1 );
   scene.add(directionalLight);
 
@@ -54,7 +55,7 @@
   scene.table = new THREE.Mesh(
     new THREE.CubeGeometry(50, 30, 150),
     new THREE.MeshPhongMaterial({
-      color: 0x007722
+      color: 0xfffcaf
     })
   );
   scene.add(scene.table);
