@@ -15,7 +15,7 @@ module.exports = function(grunt) {
         }
       },
       html: {
-        files: ['index.html'],
+        files: ['index.html', 'textures/index.html'],
         tasks: [],
         options: {
           spawn: false,
