@@ -8,13 +8,13 @@ var auth = new FirebaseSimpleLogin(firebase, function(error, user) {
     console.log(error);
   } else if (user) {
     console.log(user);
-    $navbar.find('.navbar-text').html('Signed in as ' + user.displayName + ' (<a href="#" data-logout>Sign out</a>)')
+    $navbar.find('[data-login]').html('Sign out ' + user.displayName + '</a>').attr('data-logout', true).removeData('login')
     $('[data-logout]').click(function() {
       auth.logout();
       window.location.reload();
     });
   } else {
-    $navbar.find('.navbar-link').click(function() {
+    $navbar.find('[data-login]').click(function() {
       auth.login('facebook', {rememberMe: true, preferRedirect: true});
     });
   }
