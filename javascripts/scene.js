@@ -136,21 +136,24 @@
   window.render = function() {
     // todo: should used estimated time in which the object will be rendered to the screen
     var thisFrameTime = (new Date).getTime()
-//    console.log(world.bodies[0].position.y.toPrecision(2));
 
     cameraCube.rotation.copy( camera.rotation );
     controls.update();
 
     window.world.step(thisFrameTime - lastFrameTime);
     lastFrameTime = thisFrameTime;
-//
+
     for (var i = 0; i < window.physicsObjects.length; i++){
       var physicsObject = window.physicsObjects[i].physicsObject;
       var sceneObject   = window.physicsObjects[i].sceneObject;
       sceneObject.position.copy(physicsObject.position);
-//      sceneObject.quaternion.copy(physicsObject.quaternion);
+      // see https://github.com/schteppe/cannon.js/issues/133
+      // sceneObject.quaternion.copy(physicsObject.quaternion);
+      sceneObject.quaternion._x = physicsObject.quaternion.x
+      sceneObject.quaternion._y = physicsObject.quaternion.y
+      sceneObject.quaternion._z = physicsObject.quaternion.z
+      sceneObject.quaternion._w = physicsObject.quaternion.w
     }
-//    pongBall.position.copy(window.physicsObjects[0].physicsObject.position)
 
     ballPositionHud.innerHTML = pongBall.position.toArray().map(function(num){return Math.round(num)});
 
