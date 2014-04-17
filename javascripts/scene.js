@@ -147,13 +147,19 @@
     for (var i = 0; i < window.physicsObjects.length; i++){
       var physicsObject = window.physicsObjects[i].physicsObject;
       var sceneObject   = window.physicsObjects[i].sceneObject;
-      sceneObject.position.copy(physicsObject.position);
-      // see https://github.com/schteppe/cannon.js/issues/133
-      // sceneObject.quaternion.copy(physicsObject.quaternion);
-      sceneObject.quaternion._x = physicsObject.quaternion.x
-      sceneObject.quaternion._y = physicsObject.quaternion.y
-      sceneObject.quaternion._z = physicsObject.quaternion.z
-      sceneObject.quaternion._w = physicsObject.quaternion.w
+      if (sceneObject.inHand){
+        // CANNON treats this as a copyTO :-/
+        physicsObject.position.set.apply(physicsObject.position, sceneObject.position.toArray())
+      }
+      else{
+        sceneObject.position.copy(physicsObject.position);
+        // see https://github.com/schteppe/cannon.js/issues/133
+        // sceneObject.quaternion.copy(physicsObject.quaternion);
+        sceneObject.quaternion._x = physicsObject.quaternion.x
+        sceneObject.quaternion._y = physicsObject.quaternion.y
+        sceneObject.quaternion._z = physicsObject.quaternion.z
+        sceneObject.quaternion._w = physicsObject.quaternion.w
+      }
     }
 
     ballPositionHud.innerHTML = pongBall.position.toArray().map(function(num){return Math.round(num)});

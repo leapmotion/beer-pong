@@ -6,7 +6,7 @@ var palmPositionHud = document.getElementById('palmPosition');
 (window.controller = new Leap.Controller)
   .use('riggedHand', {
     parent: window.scene,
-    positionScale: 2,
+    positionScale: 2.5,
     // assume right hand
     offset: (new THREE.Vector3(6, 10, 40))
   })
@@ -21,7 +21,11 @@ var palmPositionHud = document.getElementById('palmPosition');
 
     palmPositionHud.innerHTML = mesh.position.toArray().map(function(num){return Math.round(num)});
     if (hand.pinchStrength > 0.5) {
+      // may need to use constraints for this
+      pongBall.inHand = true;
       pongBall.position.copy(mesh.position);
+    }else{
+      pongBall.inHand = false;
     }
   });
 
