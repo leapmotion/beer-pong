@@ -21,4 +21,11 @@
 
     window.render();
   }
+  Game.overlay = function(text) {
+    var $overlay = $('<div class="overlay"></div>');
+    $overlay.appendTo($('body')).html(text)
+      .fadeIn('fast').animate({ 'opacity': 0, 'zoom': '2' }, {duration: 3000, queue: false}, function(e) {
+        e.target.remove();
+      });
+  }
 }).call(this);

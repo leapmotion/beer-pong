@@ -23,3 +23,12 @@ body {
     -moz-text-shadow: 3px 3px 8px #fff;
     -webkit-text-shadow: 3px 3px 8px #fff;
     text-shadow: 3px 3px 8px #fff; }
+
+.overlay {
+  position: fixed;
+  top: 40%;
+  font-size: 35pt;
+  color: #00bafa;
+  text-align: center;
+  left: 0;
+  right: 0; }
