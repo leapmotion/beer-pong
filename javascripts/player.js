@@ -36,14 +36,8 @@
 
   Player.prototype.addCupOffsetBy = function (offset) {
     var previousPosition = this.cups[this.cups.length - 1]
-    if (!previousPosition) {
-      previousPosition = this.pointPosition;
-    } else {
-      previousPosition = previousPosition.position
-    }
-
     var cup = this.addCup();
-    cup.position.copy(previousPosition);
+    cup.position.copy(this.pointPosition);
 
     if (offset) {
       cup.position.add(offset);
@@ -52,18 +46,10 @@
   }
 
 
-  var cupPlacementDistance = 4.1;
-
-  Player.prototype.lowerLeftCupOffset = function () {
-    return new THREE.Vector3(
-        -cupPlacementDistance * 0.7071067811865475 + this.placementNoise(),
-      0,
-        cupPlacementDistance * 0.7071067811865475 + this.placementNoise()
-    ).multiply(this.rotation)
-  }
+  var cupPlacementDistance = 2.6;
 
   Player.prototype.rightwardCupOffset = function () {
-    return new THREE.Vector3(cupPlacementDistance  + 0.1 + this.placementNoise(), 0, 0).multiply(this.rotation);
+    return new THREE.Vector3(cupPlacementDistance  + this.placementNoise(), 0, 0).multiply(this.rotation);
   }
 
   Player.prototype.downwardCupOffset = function () {
@@ -75,27 +61,28 @@
   }
 
   Player.prototype.sixCupFormation = function () {
-    this.addCupOffsetBy()
-    this.addCupOffsetBy(this.lowerLeftCupOffset())
-    this.addCupOffsetBy(this.rightwardCupOffset())
-    this.addCupOffsetBy(this.lowerLeftCupOffset().add((this.rightwardCupOffset().multiplyScalar(-1))))
-    this.addCupOffsetBy(this.rightwardCupOffset())
-    this.addCupOffsetBy(this.rightwardCupOffset())
+    this.addCupOffsetBy(); // top
+    this.addCupOffsetBy(this.rightwardCupOffset().add(this.downwardCupOffset()));
+    this.addCupOffsetBy(this.rightwardCupOffset().multiplyScalar(-1).add(this.downwardCupOffset()));
+    this.addCupOffsetBy(this.downwardCupOffset().multiplyScalar(2));
+
+    this.addCupOffsetBy(this.rightwardCupOffset().multiplyScalar(2).add(this.downwardCupOffset().multiplyScalar(2)));
+    this.addCupOffsetBy(this.rightwardCupOffset().multiplyScalar(-2).add(this.downwardCupOffset().multiplyScalar(2)));
   }
 
   Player.prototype.tenCupFormation = function () {
-    this.sixCupFormation()
-    this.addCupOffsetBy(this.lowerLeftCupOffset().add((this.rightwardCupOffset().multiplyScalar(-2))))
-    this.addCupOffsetBy(this.rightwardCupOffset())
-    this.addCupOffsetBy(this.rightwardCupOffset())
-    this.addCupOffsetBy(this.rightwardCupOffset())
+    this.sixCupFormation();
+    this.addCupOffsetBy(this.downwardCupOffset().multiplyScalar(3).add(this.rightwardCupOffset().multiplyScalar(-3)));
+    this.addCupOffsetBy(this.downwardCupOffset().multiplyScalar(3).add(this.rightwardCupOffset().multiplyScalar(-1)));
+    this.addCupOffsetBy(this.downwardCupOffset().multiplyScalar(3).add(this.rightwardCupOffset().multiplyScalar(1)));
+    this.addCupOffsetBy(this.downwardCupOffset().multiplyScalar(3).add(this.rightwardCupOffset().multiplyScalar(3)));
   }
 
   // todo: this would need to work with existing cups..
   Player.prototype.ibeamFormation = function () {
-    this.addCupOffsetBy()
-    this.addCupOffsetBy(this.downwardCupOffset())
-    this.addCupOffsetBy(this.downwardCupOffset())
+    this.addCupOffsetBy();
+    this.addCupOffsetBy(this.downwardCupOffset());
+    this.addCupOffsetBy(this.downwardCupOffset());
   }
 
   Player.prototype.resetCups = function () {
