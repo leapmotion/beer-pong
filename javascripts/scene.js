@@ -25,7 +25,7 @@
 //  pointLight.lookAt(new THREE.Vector3(0, 0, 0));
 //  scene.add(pointLight);
 
-  directionalLight = new THREE.DirectionalLight(0xcccccc);
+  directionalLight = new THREE.DirectionalLight(0xffffff);
   directionalLight.position.set( 0, 1, 1 );
   scene.add(directionalLight);
 
@@ -51,7 +51,7 @@
   scene.table = new THREE.Mesh(
     new THREE.CubeGeometry(60, 3, 150),
     new THREE.MeshPhongMaterial({
-      color: 0x007722
+      color: 0xfffcaf
     })
   );
   scene.add(scene.table);
