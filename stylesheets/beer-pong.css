@@ -1,7 +1,0 @@
-.navbar-text {
-  position: fixed;
-  renderer.domElement.style.top = 0;
-  renderer.domElement.style.left = 0;
-  renderer.domElement.style.right = 0;
-  renderer.domElement.style.width = '100%';
-}
