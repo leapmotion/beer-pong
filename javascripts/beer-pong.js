@@ -1,6 +1,9 @@
 (window.controller = new Leap.Controller)
   .use('riggedHand', {
-    parent: window.scene
+    parent: window.scene,
+    positionScale: 2,
+    // assume right hand
+    offset: (new THREE.Vector3(6, 10, 40))
   })
   .connect()
   .on('frame', function(frame){

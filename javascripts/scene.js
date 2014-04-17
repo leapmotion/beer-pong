@@ -13,16 +13,20 @@
   renderer.domElement.style.width = '100%';
   renderer.domElement.style.height = '100%';
   document.body.appendChild(renderer.domElement);
+//
+//  scene.add(new THREE.AmbientLight(0x888888));
+//
+//  pointLight = new THREE.PointLight(0xcccccc);
+//  pointLight.position = new THREE.Vector3(-20, 10, 0);
+//  pointLight.lookAt(new THREE.Vector3(0, 0, 0));
+//  scene.add(pointLight);
 
-  scene.add(new THREE.AmbientLight(0x888888));
-
-  pointLight = new THREE.PointLight(0xcccccc);
-  pointLight.position = new THREE.Vector3(-20, 10, 0);
-  pointLight.lookAt(new THREE.Vector3(0, 0, 0));
-  scene.add(pointLight);
+  directionalLight = new THREE.DirectionalLight(0xcccccc);
+  directionalLight.position.set( 0, 1, 1 );
+  scene.add(directionalLight);
 
   camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 1000);
-  camera.position.fromArray([0, 3, 15]);
+  camera.position.fromArray([0, 60, 150]);
   camera.lookAt(new THREE.Vector3(0, 0, 0));
 
   var axisHelper = new THREE.AxisHelper( 5 );
@@ -36,6 +40,18 @@
   }, false);
 
   scene.add(camera);
+
+
+
+  var table = new THREE.Mesh(
+    new THREE.CubeGeometry(60, 30, 150),
+    new THREE.MeshPhongMaterial({
+      color: 0x0000ff
+    })
+  );
+  scene.add(table);
+
+
 
   pongBall = new THREE.Mesh(
     new THREE.SphereGeometry(1),
