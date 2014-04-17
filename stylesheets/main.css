@@ -18,9 +18,8 @@ body {
 #navbar {
   position: relative;
   z-index: 3; }
-
-#navbar h1 {
-  float: left;
-  -moz-text-shadow: 3px 3px 8px #fff;
-  -webkit-text-shadow: 3px 3px 8px #fff;
-  text-shadow: 3px 3px 8px #fff; }
+  #navbar h1 {
+    float: left;
+    -moz-text-shadow: 3px 3px 8px #fff;
+    -webkit-text-shadow: 3px 3px 8px #fff;
+    text-shadow: 3px 3px 8px #fff; }
