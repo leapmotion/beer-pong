@@ -1,9 +1,11 @@
 (function () {
   window.Game = {};
-  var cupRadius = 2;
+  var cupRadius = 3;
+
+  Game.cupPlacementDistance = cupRadius * 1.7;
 
   //  CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments, heightSegments, openEnded)
-  Game.cupGeometry = new THREE.CylinderGeometry(cupRadius, 1.8, 5, 32, true);
+  Game.cupGeometry = new THREE.CylinderGeometry(cupRadius, 0.8 * cupRadius, cupRadius * 2, 32, true);
   Game.cupMaterial = new THREE.MeshBasicMaterial({color: 0xff0000});
 
   Game.player1 = new Player({

@@ -24,11 +24,11 @@
 //  scene.add(pointLight);
 
   directionalLight = new THREE.DirectionalLight(0xffffff);
-  directionalLight.position.set( 0, 1, 1 );
+  directionalLight.position.set( 0, 100, 1 );
   scene.add(directionalLight);
 
   camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 1000);
-  camera.position.fromArray([0, 60, 150]);
+  camera.position.fromArray([0, 26, 60]);
   camera.lookAt(new THREE.Vector3(0, 0, 0));
   cameraCube = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 100000 );
 
@@ -51,17 +51,21 @@
 
 
   scene.table = new THREE.Mesh(
-    new THREE.CubeGeometry(50, 30, 150),
+    new THREE.CubeGeometry(50, 1.8, 83),
     new THREE.MeshPhongMaterial({
-      color: 0xfffcaf
+      color: 0x5eaa02
     })
   );
   scene.add(scene.table);
 
+  scene.tableStripe = new THREE.Mesh(
+    new THREE.CubeGeometry(50, 1.8, 83),
+    new THREE.MeshPhongMaterial({
+      color: 0x5eaa02
+    })
+  );
+  scene.add(scene.table);
 
-
-//  Game.cupGeometry = new THREE.CylinderGeometry(cupRadius, 1.8, 5, 32, true);
-//  Game.cupMaterial = new THREE.MeshBasicMaterial({color: 0xff0000});
 
   pongBall = new THREE.Mesh(
     // function ( radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength ) {

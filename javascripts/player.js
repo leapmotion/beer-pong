@@ -15,7 +15,7 @@
       0,
       // is there a better way of getting table top-surface position?
         scene.table.position.y + scene.table.geometry.height / 2 + Game.cupGeometry.height / 2,
-      scene.table.geometry.width + 10 // this is based upon table height
+        scene.table.geometry.depth/2 - 20
     ).multiply(this.rotation);
     this.cups = [];
   }
@@ -46,14 +46,14 @@
   }
 
 
-  var cupPlacementDistance = 2.6;
+  var cupPlacementDistance = 6;
 
   Player.prototype.rightwardCupOffset = function () {
-    return new THREE.Vector3(cupPlacementDistance  + this.placementNoise(), 0, 0).multiply(this.rotation);
+    return new THREE.Vector3(Game.cupPlacementDistance  + this.placementNoise(), 0, 0).multiply(this.rotation);
   }
 
   Player.prototype.downwardCupOffset = function () {
-    return new THREE.Vector3(0, 0, cupPlacementDistance+ this.placementNoise()).multiply(this.rotation);
+    return new THREE.Vector3(0, 0, Game.cupPlacementDistance+ this.placementNoise()).multiply(this.rotation);
   }
 
   Player.prototype.lastCup = function () {

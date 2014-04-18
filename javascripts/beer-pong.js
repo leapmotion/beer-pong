@@ -11,7 +11,7 @@ var pinchStrHud = document.getElementById('pinchStr');
     parent: window.scene,
     positionScale: 2.5,
     // assume right hand
-    offset: (new THREE.Vector3(6, 10, 40))
+    offset: (new THREE.Vector3(0, 3, 10))
   })
   .use('averageVelocity')
   .connect()
