@@ -45,12 +45,9 @@ var gameId = window.location.hash.split('#')[1];
 if (gameId) {
   firebase.child('/games/' + gameId + '/turns').on('child_added', function (turn) {
     Game.overlay(turn.val().name + ' throws!');
-    controller.use('playback');
-    var frames = controller.plugins.playback.player.decompress(turn.val().data);
-    console.log(frames);
     controller.use('playback', {
       autoPlay: true,
-      frames: frames,
+      recording: 'perfection.lz',
       pauseOnHand: false,
       loop: true
     });
