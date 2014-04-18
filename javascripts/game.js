@@ -81,6 +81,7 @@
     console.log('ready to send frames!');
   }
 
+
   Game.watchPlayer = function (snapshot) {
     console.log('Watching player', snapshot.val().name);
 
@@ -88,9 +89,9 @@
     this.playersRef.child(snapshot.name()).child('/frames').limit(10).on('child_added', Game.receiveFrame);
   }
 
+
   Game.sendFrame = function (frame) {
     if (!this.framesRef) {
-      console.log('dropping frame, not connected to firebase');
       return;
     }
     // clip old frame data after ~500 frames
@@ -112,7 +113,11 @@
     this.framesSent++;
   }
 
+
   Game.receiveFrame = function (snapshot) {
+    var userId = snapshot.ref().toString()
+    console.log('we need to regex player name from snapshot', snapshot, userId);
+    debugger
     this.framesReceived++;
 
     var frameData = snapshot.val().frame;
@@ -121,11 +126,21 @@
       frameData = LZString.decompressFromBase64(frameData);
     }
 
-    player.sendFrame(frameData);
+    //    no leap or :
+    //
+    //    custom animation loop.  Watch pool of player frames. Combine. Call sendFrame.
+    //
+    //
+    //    With Leap
+    //
+    //    on every rawFrame (in the record protocol), after sending, check pool of player frames, concat.
+
+    LeapHandler.addUserFrame(userId, frameData);
   }.bind(this);
 
+
   Game.begin = function () {
-    this.connectToLiveGame();
+//    this.connectToLiveGame();
 
     // connect or create game by id
 
