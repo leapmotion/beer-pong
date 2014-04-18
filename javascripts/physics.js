@@ -7,7 +7,7 @@
 
   // Setup our world
   window.world = new CANNON.World();
-  world.gravity.set(0, -0.0008, 0);
+  world.gravity.set(0, -0.0006, 0);
   world.broadphase = new CANNON.NaiveBroadphase();
 
 
@@ -21,7 +21,7 @@
       this.physicsObject = sphereBody;
 
       sphereBody.position.set(0, 50, 50);
-      sphereBody.linearDamping = 0.0001;
+      sphereBody.linearDamping = 0.00001;
 
       world.add(sphereBody);
 
@@ -38,10 +38,6 @@
 
   pongBall.addPhysics();
 
-  var groundShape = new CANNON.Plane();
-  window.groundBody = new CANNON.RigidBody(0, groundShape);
-
-
   // 0 mass is infinite
   var table = new CANNON.RigidBody(0,
     new CANNON.Box(new CANNON.Vec3(
@@ -54,17 +50,9 @@
   // we could create a new contact material with both the table material and ball material
   // instead, just change the global contactmaterial
   // this controls the bouncyness of the ball
-  world.defaultContactMaterial.restitution = 0.8
+  world.defaultContactMaterial.restitution = 1
 
-//  table.linearDamping = 0.000001;
-  console.log(table);
   world.add(table);
 
-
-  groundBody.position.set(0, 30, 0);
-  groundBody.quaternion.setFromAxisAngle({x: 1, y: 0, z: 0}, Math.PI / 2)
-  world.add(groundBody);
-
-  // todo: add table
 
 }).call(this);
