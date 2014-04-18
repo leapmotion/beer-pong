@@ -5,6 +5,8 @@ var palmPositionHud = document.getElementById('palmPosition');
 var palmVelocityHud = document.getElementById('palmVelocity');
 var tipAvgVelHud = document.getElementById('tipAvgVel');
 var pinchStrHud = document.getElementById('pinchStr');
+var frameTrafficHud = document.getElementById('frameTraffic');
+var player;
 
 (window.controller = new Leap.Controller)
   .use('riggedHand', {
@@ -15,16 +17,33 @@ var pinchStrHud = document.getElementById('pinchStr');
   })
   .use('accumulate')
   .connect()
+  .use('playback')
   .on('frame', function(frame){
     var hand, mesh;
     if (!frame.hands[0]) {
+
       return;
     }
+
+    if (player.state != 'recording'){
+      // we can't put this on ready because of strange "unrecognized version" error in chooseProtocol.
+      player.record();
+    }
+//    console.log(player.frameData.length);
+
+    if (frame.id % 4 && player.frameData.length){
+      // it takes 1 frame to begin recording, so we check length too
+      Game.sendFrame(player.frameData[player.frameData.length -1]);
+    }
+
     hand = frame.hands[0];
     mesh = hand.data('riggedHand.mesh');
 
     palmPositionHud.innerHTML = mesh.position.toArray().map(function(num){return Math.round(num)});
     palmVelocityHud.innerHTML = hand.palmVelocity.map(function(num){return Math.round(num)});
+    frameTrafficHud.innerHTML = Game.framesSent +  '/' + Game.framesReceived;
+//    console.log(Game.framesReceived, Game.framesSent);
+
 
     var velocity = hand.accumulate('palmVelocity', 20, function (historyTotal) {
       var current = [0,0,0];
@@ -39,7 +58,7 @@ var pinchStrHud = document.getElementById('pinchStr');
     tipAvgVelHud.innerHTML = velocity.map(function(num){ return num.toPrecision(2) });
     pinchStrHud.innerHTML = hand.pinchStrength;
 
-    // todo: pinch events
+
     if (hand.pinchStrength > 0.5) {
       // may need to use constraints for this
       pongBall.inHand = true;
@@ -52,9 +71,12 @@ var pinchStrHud = document.getElementById('pinchStr');
     }else{
       pongBall.inHand = false;
     }
+
   });
 
+player = controller.plugins.playback.player;
 Game.begin();
+
 
 
 
