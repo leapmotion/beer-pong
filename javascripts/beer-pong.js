@@ -25,7 +25,9 @@ var pinchStrHud = document.getElementById('pinchStr');
 
     palmPositionHud.innerHTML = mesh.position.toArray().map(function(num){return Math.round(num)});
     palmVelocityHud.innerHTML = hand.palmVelocity.map(function(num){return Math.round(num)});
-    tipAvgVelHud.innerHTML = hand.indexFinger.averageVelocity('tipPosition');
+
+    var velocity = hand.indexFinger.averageVelocity('tipPosition');
+    tipAvgVelHud.innerHTML = velocity.map(function(num){ return num.toPrecision(2) });
     pinchStrHud.innerHTML = hand.pinchStrength;
 
     // todo: pinch events
@@ -33,7 +35,11 @@ var pinchStrHud = document.getElementById('pinchStr');
       // may need to use constraints for this
       pongBall.inHand = true;
       pongBall.position.copy(mesh.position);
-      pongBall.physicsObject.velocity.set.apply(pongBall.physicsObject.velocity, hand.palmVelocity.map(function(num){ return num / 2000}))
+      pongBall.physicsObject.velocity.set.apply(
+        pongBall.physicsObject.velocity,
+//        hand.palmVelocity.map(function(num){ return num / 2000}) //todo: make this not be an arbitrary number..
+        velocity.map(function(num){ return num / 80})
+      )
     }else{
       pongBall.inHand = false;
     }

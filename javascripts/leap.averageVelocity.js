@@ -8,6 +8,7 @@
 // defaultDuration - a number, in ms, to maintain a rolling average
 // this can be overridden on a per-property basis, by providing a second argument to averageVelocity
 // todo: we hold 10 frames now. should maybe calc ms. :-P
+// todo: roll-out as plugin
 
 Leap.plugin('averageVelocity', function(scope){
   scope || (scope = {});
@@ -29,18 +30,34 @@ Leap.plugin('averageVelocity', function(scope){
           data.shift();
         }
 
-        this.data('averageVelocity.' + property, data)
+        this.data('averageVelocity.' + property, data);
 
-        // not enough samples
-        if (data.length < 2){
-          return 0;
-        }
 
-        var sum = 0;
-        for (var i = 1; i < data.length; i++){
-          sum += (data[i] - data[i - 1]);
+        // Vector math average vs scalar average
+        if (data[0] instanceof Array){
+
+          var sum = [0,0,0];
+          // todo: store deltas for performance saving
+          var delta = [];
+          if (data.length > 1){
+            for (var i = 1; i < data.length; i++){
+              Leap.vec3.subtract(delta, data[i], data[i - 1]);;
+              Leap.vec3.add(sum, sum, delta);
+            }
+            Leap.vec3.divide(sum, sum, [data.length - 1, data.length - 1, data.length - 1]);
+          }
+
+        }else{
+
+          if (data.length > 1){
+            var sum = 0;
+            for (var i = 1; i < data.length; i++){
+              sum += (data[i] - data[i - 1]);
+            }
+            sum = sum / (data.length - 1);
+          }
+
         }
-        sum = sum / (data.length - 1);
 
         return sum;
       }
