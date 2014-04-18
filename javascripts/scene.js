@@ -23,9 +23,6 @@
 //  pointLight.lookAt(new THREE.Vector3(0, 0, 0));
 //  scene.add(pointLight);
 
-  directionalLight = new THREE.DirectionalLight(0xffffff);
-  directionalLight.position.set( 0, 100, 1 );
-  scene.add(directionalLight);
 
   camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 1000);
   camera.position.fromArray([0, 26, 60]);
@@ -55,21 +52,43 @@
   );
   scene.add(scene.table);
 
-  scene.tableStripe = new THREE.Mesh(
-    new THREE.CubeGeometry(2, 1.8, 83),
-    new THREE.MeshPhongMaterial({
-      color: 0x002000
-    })
-  );
-  scene.tableStripe.position.set(0,0.01,0);
-  scene.add(scene.tableStripe);
+  scene.middleStripe = new THREE.Mesh( new THREE.CubeGeometry(0.3, 1.8, 83), new THREE.MeshPhongMaterial({ color: 0xffffff }));
+  scene.middleStripe.position.set(0,0.01,0);
+  scene.add(scene.middleStripe);
+
+  scene.leftStripe = new THREE.Mesh( new THREE.CubeGeometry(0.3, 1.8, 83), new THREE.MeshPhongMaterial({ color: 0xffffff }));
+  scene.leftStripe.position.set(scene.table.geometry.width/2,0.01,0);
+  scene.add(scene.leftStripe);
+
+  scene.rightStripe = new THREE.Mesh( new THREE.CubeGeometry(0.3, 1.8, 83), new THREE.MeshPhongMaterial({ color: 0xffffff }));
+  scene.rightStripe.position.set(-scene.table.geometry.width/2,0.01,0);
+  scene.add(scene.rightStripe);
+
+  scene.frontStripe = new THREE.Mesh( new THREE.CubeGeometry(scene.table.geometry.width, 1.8, 0.3), new THREE.MeshPhongMaterial({ color: 0xffffff }));
+  scene.frontStripe.position.set(0,0.01,scene.table.geometry.depth/2);
+  scene.add(scene.frontStripe);
+
+  scene.backStripe = new THREE.Mesh( new THREE.CubeGeometry(scene.table.geometry.width, 1.8, 0.3), new THREE.MeshPhongMaterial({ color: 0xffffff }));
+  scene.backStripe.position.set(0,0.01,-scene.table.geometry.depth/2);
+  scene.add(scene.backStripe);
 
 
+  directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
+  directionalLight.position.set( 0, 800, 1 );
+  scene.add(directionalLight);
   // todo: play with shadows
   // ( color, intensity, distance )
-  scene.pointLight = new THREE.PointLight(0xffffff, 0.7, 100);
-  scene.pointLight.position.set(0,30,0);
-  scene.add(scene.pointLight);
+  scene.rightLight = new THREE.PointLight(0xffffff, 1, 100);
+  scene.rightLight.position.set(50,10,0);
+  scene.add(scene.rightLight);
+
+  scene.leftLight = new THREE.PointLight(0xffffff, 1, 100);
+  scene.leftLight.position.set(-50,10,0);
+  scene.add(scene.leftLight);
+
+  scene.frontLight = new THREE.PointLight(0xffffff, 1, 100);
+  scene.frontLight.position.set(0,10,scene.table.geometry.depth/2+4);
+  scene.add(scene.frontLight);
 
   // ( color, intensity, distance )
   scene.ambientLight = new THREE.AmbientLight(0x202010);

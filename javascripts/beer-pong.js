@@ -22,6 +22,8 @@ booSound.addEventListener('ended', function() { booSound.load(); });
   .connect()
   .use('playback')
   .on('frame', function(frame){
+
+  pongBall.position.set(0,50,0);
     var hand, mesh;
     if (!frame.hands[0]) {
 
@@ -74,12 +76,13 @@ booSound.addEventListener('ended', function() { booSound.load(); });
     } else {
       pongBall.inHand = false;
       var lostHeight = -10;
-      if (pongBall.position.y < lostHeight && !pongBall.belowTable) {
-        booSound.play();
-        pongBall.belowTable = true;
-      } else if (pongBall.position.y >= lostHeight && pongBall.belowTable) {
-        pongBall.belowTable = false;
-      }
+    }
+
+    if (pongBall.position.y < lostHeight && !pongBall.belowTable && !pongBall.inHand) {
+      booSound.play();
+      pongBall.belowTable = true;
+    } else if (pongBall.position.y >= lostHeight && pongBall.belowTable) {
+      pongBall.belowTable = false;
     }
 
   });
