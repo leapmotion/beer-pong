@@ -13,7 +13,7 @@
   world.broadphase = new CANNON.NaiveBroadphase();
 
   // Controls gravity
-  world.gravity.set(0, -0.0006, 0);
+  world.gravity.set(0, -0.0004, 0);
 
   // this controls the bouncyness of the ball
   // (we could create a new contact material with both the table material and ball material
@@ -53,12 +53,20 @@
     new CANNON.Box(new CANNON.Vec3(
       scene.table.geometry.width / 2,
       scene.table.geometry.height / 2,
-      scene.table.geometry.depth * 2 // quadruple depth to prevent fall-through
+      scene.table.geometry.depth / 2 // quadruple depth to prevent fall-through
     ))
   );
 
 
   world.add(table);
+  var collisionSound = document.getElementById('collision');
+  table.addEventListener('collide', function() {
+    collisionSound.play();
+  });
+  collisionSound.addEventListener('ended', function() {
+    collisionSound.load();
+  });
+
 
 
 }).call(this);
