@@ -1,7 +1,4 @@
 (function(){
-  var pointLight;
-
-
   scene = new THREE.Scene();
   sceneCube = new THREE.Scene();
   renderer = new THREE.WebGLRenderer({alpha: false});
