@@ -18,7 +18,7 @@
   // this controls the bouncyness of the ball
   // (we could create a new contact material with both the table material and ball material
   // instead, just change the global contactmaterial)
-  world.defaultContactMaterial.restitution = 1
+  world.defaultContactMaterial.restitution = 0.99;
 
 
   THREE.Mesh.prototype.addPhysics = function(){
