@@ -30,14 +30,12 @@ var pinchStrHud = document.getElementById('pinchStr');
       var current = [0,0,0];
       historyTotal.push(hand.palmVelocity);
       for (var i = 0; i<historyTotal.length; i++) {
-        console.log(historyTotal);
         current[0] += historyTotal[i][0] * 0.0035/2;
         current[1]  += historyTotal[i][1] * 0.0045/2;
         current[2]  += historyTotal[i][2] * 0.0045/2;
       }
       return current;
     });
-    console.log(velocity);
     tipAvgVelHud.innerHTML = velocity.map(function(num){ return num.toPrecision(2) });
     pinchStrHud.innerHTML = hand.pinchStrength;
 

@@ -53,7 +53,7 @@
     new CANNON.Box(new CANNON.Vec3(
       scene.table.geometry.width / 2,
       scene.table.geometry.height / 2,
-      scene.table.geometry.depth / 2
+      scene.table.geometry.depth * 2 // quadruple depth to prevent fall-through
     ))
   );
 
