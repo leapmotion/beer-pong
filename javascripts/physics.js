@@ -3,12 +3,22 @@
 
 (function () {
 
-  window.physicsObjects = []
+  window.physicsObjects = [];
+
+  // this controls the drag on the ball
+  var linearDamping = 0.00001;
 
   // Setup our world
   window.world = new CANNON.World();
-  world.gravity.set(0, -0.0006, 0);
   world.broadphase = new CANNON.NaiveBroadphase();
+
+  // Controls gravity
+  world.gravity.set(0, -0.0006, 0);
+
+  // this controls the bouncyness of the ball
+  // (we could create a new contact material with both the table material and ball material
+  // instead, just change the global contactmaterial)
+  world.defaultContactMaterial.restitution = 1
 
 
   THREE.Mesh.prototype.addPhysics = function(){
@@ -21,7 +31,7 @@
       this.physicsObject = sphereBody;
 
       sphereBody.position.set(0, 50, 50);
-      sphereBody.linearDamping = 0.00001;
+      sphereBody.linearDamping = linearDamping;
 
       world.add(sphereBody);
 
@@ -47,10 +57,6 @@
     ))
   );
 
-  // we could create a new contact material with both the table material and ball material
-  // instead, just change the global contactmaterial
-  // this controls the bouncyness of the ball
-  world.defaultContactMaterial.restitution = 1
 
   world.add(table);
 
