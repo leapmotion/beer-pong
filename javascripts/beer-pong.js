@@ -47,15 +47,17 @@ var pinchStrHud = document.getElementById('pinchStr');
 
 Game.begin();
 
-var gameId = window.location.hash.split('#')[1];
-if (gameId) {
-  firebase.child('/games/' + gameId + '/turns').on('child_added', function (turn) {
-    Game.overlay(turn.val().name + ' throws!');
-    controller.use('playback', {
-      autoPlay: true,
-      recording: 'perfection.lz',
-      pauseOnHand: false,
-      loop: true
-    });
-  });
-}
+
+
+
+//if (gameId) {
+//  firebase.child('/games/' + gameId + '/turns').on('child_added', function (turn) {
+//    Game.overlay(turn.val().name + ' throws!');
+//    controller.use('playback', {
+//      autoPlay: true,
+//      recording: 'perfection.lz',
+//      pauseOnHand: false,
+//      loop: true
+//    });
+//  });
+//}

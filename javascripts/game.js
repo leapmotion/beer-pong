@@ -1,4 +1,5 @@
 (function () {
+
   window.Game = {};
   var cupRadius = 3;
 
@@ -10,19 +11,44 @@
 
   Game.player1 = new Player({
     side: 'near'
-  })
+  });
 
   Game.player2 = new Player({
     side: 'far'
-  })
+  });
 
+  Game.id = function(){
+    return window.location.hash.split('#')[1];
+  }
+
+  Game.connectToFirebase = function(){
+    if (this.id()){
+      this.gameRef = firebaseGamesRef.child(this.id());
+      this.gameRef.on('value', function(snapshot){
+        console.log('Connected to game ' + this.gameRef.name() + ', created:  ' + new Date(snapshot.val().created_at))
+      }.bind(this));
+    }else{
+      this.gameRef = firebaseGamesRef.push({created_at: (new Date()).getTime()});
+      console.log('created game', this.gameRef.name())
+      window.location.hash = '#' + this.gameRef.name();
+    }
+  }
 
   Game.begin = function () {
-    this.player1.resetCups()
-    this.player2.resetCups()
+    this.connectToFirebase();
+
+    // connect or create game by id
+
+    this.player1.resetCups();
+    this.player2.resetCups();
 
     window.render();
-  }
+
+  };
+
+
+
+  // what does this method do?
   Game.overlay = function(text) {
     var $overlay = $('<div class="overlay"></div>');
     $overlay.appendTo($('body')).html(text)
