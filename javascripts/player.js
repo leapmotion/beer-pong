@@ -29,6 +29,8 @@
   // adds a threejs object
   Player.prototype.addCup = function () {
     var cylinder = new THREE.Mesh(Game.cupGeometry, Game.cupMaterial);
+    cylinder.castShadow = true;
+    cylinder.receiveShadow = true;
     scene.add(cylinder);
     this.cups.push(cylinder);
     return cylinder;

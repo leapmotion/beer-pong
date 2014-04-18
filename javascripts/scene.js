@@ -32,9 +32,6 @@
   camera.lookAt(new THREE.Vector3(0, 0, 0));
   cameraCube = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 100000 );
 
-  var axisHelper = new THREE.AxisHelper( 5 );
-  scene.add( axisHelper );
-
   window.addEventListener('resize', function() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -53,25 +50,42 @@
   scene.table = new THREE.Mesh(
     new THREE.CubeGeometry(50, 1.8, 83),
     new THREE.MeshPhongMaterial({
-      color: 0x5eaa02
+      color: 0x003000
     })
   );
   scene.add(scene.table);
 
   scene.tableStripe = new THREE.Mesh(
-    new THREE.CubeGeometry(50, 1.8, 83),
+    new THREE.CubeGeometry(2, 1.8, 83),
     new THREE.MeshPhongMaterial({
-      color: 0x5eaa02
+      color: 0x002000
     })
   );
-  scene.add(scene.table);
+  scene.tableStripe.position.set(0,0.01,0);
+  scene.add(scene.tableStripe);
+
+
+  // todo: play with shadows
+  // ( color, intensity, distance )
+  scene.pointLight = new THREE.PointLight(0xffffff, 0.7, 100);
+  scene.pointLight.position.set(0,30,0);
+  scene.add(scene.pointLight);
+
+  // ( color, intensity, distance )
+  scene.ambientLight = new THREE.AmbientLight(0x202010);
+  scene.add(scene.ambientLight );
+
+
+
 
 
   pongBall = new THREE.Mesh(
     // function ( radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength ) {
     new THREE.SphereGeometry(1),
-    new THREE.MeshBasicMaterial(0x0000ff)
+    new THREE.MeshPhongMaterial(0x0000ff)
   )
+  pongBall.castShadow = true;
+  pongBall.receiveShadow = true;
   scene.add(pongBall);
 
 

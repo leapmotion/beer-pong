@@ -11,7 +11,7 @@
 
   //  CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments, heightSegments, openEnded)
   Game.cupGeometry = new THREE.CylinderGeometry(cupRadius, 0.8 * cupRadius, cupRadius * 2, 32, true);
-  Game.cupMaterial = new THREE.MeshBasicMaterial({color: 0xff0000});
+  Game.cupMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
 
   Game.player1 = new Player({
     side: 'near'
