@@ -13,7 +13,7 @@ var pinchStrHud = document.getElementById('pinchStr');
     // assume right hand
     offset: (new THREE.Vector3(0, 3, 10))
   })
-  .use('averageVelocity')
+  .use('accumulate')
   .connect()
   .on('frame', function(frame){
     var hand, mesh;
@@ -26,7 +26,18 @@ var pinchStrHud = document.getElementById('pinchStr');
     palmPositionHud.innerHTML = mesh.position.toArray().map(function(num){return Math.round(num)});
     palmVelocityHud.innerHTML = hand.palmVelocity.map(function(num){return Math.round(num)});
 
-    var velocity = hand.indexFinger.averageVelocity('tipPosition');
+    var velocity = hand.accumulate('palmVelocity', 20, function (historyTotal) {
+      var current = [0,0,0];
+      historyTotal.push(hand.palmVelocity);
+      for (var i = 0; i<historyTotal.length; i++) {
+        console.log(historyTotal);
+        current[0] += historyTotal[i][0] * 0.0035/2;
+        current[1]  += historyTotal[i][1] * 0.0045/2;
+        current[2]  += historyTotal[i][2] * 0.0045/2;
+      }
+      return current;
+    });
+    console.log(velocity);
     tipAvgVelHud.innerHTML = velocity.map(function(num){ return num.toPrecision(2) });
     pinchStrHud.innerHTML = hand.pinchStrength;
 
