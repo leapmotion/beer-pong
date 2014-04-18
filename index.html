@@ -8,7 +8,7 @@
   <body>
     <nav id="navbar" class="navbar navbar-default" role="navigation">
       <h1>Beer Pong Dating </h1>
-      <p class="navbar-text navbar-right"><button href="#" data-login type="button" class="btn-default navbar-btn btn">Sign in via Facebook to invite your buddies</button></p>
+      <p class="navbar-text navbar-right"><button data-login type="button" class="btn-default navbar-btn btn">Sign in via Facebook to invite your buddies</button></p>
     </nav>
 
     <div id="hud" onmousedown="event.stopPropagation();" class="debug">
@@ -40,7 +40,8 @@
         </tr>
       </table>
     </div>
-    <audio id="collision" preload="true"><source src="collision.mp3" /></audio>
+    <audio id="collision" preload="true"><source src="audio/collision.ogg" /></audio>
+    <audio id="boo" preload="true"><source src="audio/boo.ogg" /></audio>
 
     <script type='text/javascript' src='https://cdn.firebase.com/js/client/1.0.11/firebase.js'></script>
     <script type='text/javascript' src='https://cdn.firebase.com/js/simple-login/1.3.2/firebase-simple-login.js'></script>

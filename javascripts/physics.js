@@ -13,7 +13,7 @@
   world.broadphase = new CANNON.NaiveBroadphase();
 
   // Controls gravity
-  world.gravity.set(0, -0.0004, 0);
+  world.gravity.set(0, -0.0008, 0);
 
   // this controls the bouncyness of the ball
   // (we could create a new contact material with both the table material and ball material
@@ -49,13 +49,15 @@
   pongBall.addPhysics();
 
   // 0 mass is infinite
+  var safetyNet = 100;
   var table = new CANNON.RigidBody(0,
     new CANNON.Box(new CANNON.Vec3(
       scene.table.geometry.width / 2,
-      scene.table.geometry.height / 2,
+      scene.table.geometry.height / 2 + safetyNet,
       scene.table.geometry.depth / 2 // quadruple depth to prevent fall-through
     ))
   );
+  table.position.set(0,-safetyNet,0);
 
 
   world.add(table);
@@ -63,9 +65,7 @@
   table.addEventListener('collide', function() {
     collisionSound.play();
   });
-  collisionSound.addEventListener('ended', function() {
-    collisionSound.load();
-  });
+  collisionSound.addEventListener('ended', function() { collisionSound.load(); });
 
 
 

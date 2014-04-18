@@ -8,6 +8,9 @@ var pinchStrHud = document.getElementById('pinchStr');
 var frameTrafficHud = document.getElementById('frameTraffic');
 var player;
 
+var booSound = document.getElementById('boo');
+booSound.addEventListener('ended', function() { booSound.load(); });
+
 (window.controller = new Leap.Controller)
   .use('riggedHand', {
     parent: window.scene,
@@ -68,8 +71,15 @@ var player;
 //        hand.palmVelocity.map(function(num){ return num / 2000}) //todo: make this not be an arbitrary number..
         velocity.map(function(num){ return num / 80})
       )
-    }else{
+    } else {
       pongBall.inHand = false;
+      var lostHeight = -10;
+      if (pongBall.position.y < lostHeight && !pongBall.belowTable) {
+        booSound.play();
+        pongBall.belowTable = true;
+      } else if (pongBall.position.y >= lostHeight && pongBall.belowTable) {
+        pongBall.belowTable = false;
+      }
     }
 
   });
