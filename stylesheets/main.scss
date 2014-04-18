@@ -21,9 +21,15 @@ body{
   z-index: 3;
   h1 {
     float: left;
-    -moz-text-shadow:3px 3px 8px #fff;
-    -webkit-text-shadow:3px 3px 8px #fff;
-    text-shadow:3px 3px 8px #fff;
+    color: white;
+    -moz-text-shadow:3px 3px 8px #81d41e;
+    -webkit-text-shadow:3px 3px 8px #81d41e;
+    text-shadow:3px 3px 8px #81d41e;
+  }
+  background: none;
+  border: 0;
+  button {
+    opacity: 0.6;
   }
 }
 
