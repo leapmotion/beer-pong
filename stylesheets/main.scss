@@ -42,3 +42,17 @@ body{
   left: 0;
   right: 0;
 }
+
+#leapjsbadge{
+  position:  fixed;
+  z-index: 10;
+  bottom: 10px;
+  left: 10px;
+}
+
+#firebasebadge{
+  position:  fixed;
+  z-index: 10;
+  bottom: 10px;
+  left: 148px;
+}
