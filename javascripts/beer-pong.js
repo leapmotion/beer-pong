@@ -3,6 +3,8 @@ window.TO_DEG = 1 / TO_RAD;
 
 var palmPositionHud = document.getElementById('palmPosition');
 var palmVelocityHud = document.getElementById('palmVelocity');
+var tipAvgVelHud = document.getElementById('tipAvgVel');
+var pinchStrHud = document.getElementById('pinchStr');
 
 (window.controller = new Leap.Controller)
   .use('riggedHand', {
@@ -11,6 +13,7 @@ var palmVelocityHud = document.getElementById('palmVelocity');
     // assume right hand
     offset: (new THREE.Vector3(6, 10, 40))
   })
+  .use('averageVelocity')
   .connect()
   .on('frame', function(frame){
     var hand, mesh;
@@ -22,6 +25,8 @@ var palmVelocityHud = document.getElementById('palmVelocity');
 
     palmPositionHud.innerHTML = mesh.position.toArray().map(function(num){return Math.round(num)});
     palmVelocityHud.innerHTML = hand.palmVelocity.map(function(num){return Math.round(num)});
+    tipAvgVelHud.innerHTML = hand.indexFinger.averageVelocity('tipPosition');
+    pinchStrHud.innerHTML = hand.pinchStrength;
 
     // todo: pinch events
     if (hand.pinchStrength > 0.5) {

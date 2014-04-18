@@ -26,6 +26,14 @@
           <td>palmVelocity</td>
           <td id="palmVelocity"></td>
         </tr>
+        <tr>
+          <td>tipAvgVel</td>
+          <td id="tipAvgVel"></td>
+        </tr>
+        <tr>
+          <td>pinchStr</td>
+          <td id="pinchStr"></td>
+        </tr>
       </table>
     </div>
 
@@ -45,9 +53,12 @@
     <!-- todo: replace these with something leap-enabled! -->
     <script type="text/javascript" src="javascripts/lib/TrackballControls.js"></script>
     <!-- todo: use skeletal beta2 -->
-    <script type="text/javascript" src="javascripts/lib/leap-0.6.0-beta1.js"></script>
-    <script src="//js.leapmotion.com/leap-plugins-0.1.4.js"></script>
+    <!-- includes fixed `use` with fingers -->
+    <script type="text/javascript" src="javascripts/lib/leap-0.6.0-beta1-custom.js"></script>
+    <!-- includes fixed hand data with fingers-->
+    <script type="text/javascript" src="javascripts/lib/leap-plugins-0.1.4.1-custom.js"></script>
     <script type="text/javascript" src="javascripts/lib/leap.rigged-hand-0.1.0.js"></script>
+    <script type="text/javascript" src="javascripts/leap.averageVelocity.js"></script>
     <script type="text/javascript" src="javascripts/auth.js"></script>
     <script type="text/javascript" src="javascripts/scene.js"></script>
     <script type="text/javascript" src="javascripts/physics.js"></script>
