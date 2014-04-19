@@ -17,7 +17,6 @@ booSound.addEventListener('ended', function() { booSound.load(); });
   .use('playback')
   .on('frame', function(frame){
 
-  pongBall.position.set(0,50,0);
     var hand, mesh;
 
     document.getElementById('handsHud').innerHTML = frame.hands.length;
