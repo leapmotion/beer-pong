@@ -38,20 +38,23 @@
   Game.playerCount = 1;
   Game.streamFrames = false;
 
+  Game.gamesRef = window.firebase.child('games');
+
   // firebase structure:
   // /game/<id>/players/<id>/frames
   Game.connectToLiveGame = function () {
     console.log('Connecting to server');
     console.time('firebase-connection');
     if (this.id()) {
-      this.gameRef = firebaseGamesRef.child(this.id());
+      this.gameRef = this.gamesRef.child(this.id());
       this.gameRef.once('value', function (snapshot) {
         console.log('Connected to game ' + this.gameRef.name() + ', created:  ' + new Date(snapshot.val().created_at))
+
         this.setupPlayers();
       }.bind(this));
     } else {
       // push appears to be synchronous. IDs are generated locally.
-      this.gameRef = firebaseGamesRef.push({created_at: (new Date()).getTime()});
+      this.gameRef = this.gamesRef.push({created_at: (new Date()).getTime()});
       console.log('Created game', this.gameRef.name());
       window.location.hash = '#' + this.gameRef.name();
 
@@ -72,21 +75,28 @@
     });
     console.log('Joining as', myName, '(' + this.playerRef.name() + ')');
 
-    this.playersRef.on('child_added', function (snapshot) {
-      if (snapshot.val().state == 'disconnected') return;
+    this.playersRef.on('child_added', this.playerJoined);
 
-      if (snapshot.name() == this.playerRef.name()) {
-        this.streamFrames = true;
-      }else{
-        this.watchPlayer(snapshot);
-      }
-    }.bind(this));
-
+    // do cleanup here?
     this.playerRef.child('state').onDisconnect().set('disconnected');
 
     this.framesRef = this.playerRef.child('frames');
     console.log('ready to send frames!');
   }
+
+  Game.playerJoined = function(snapshot){
+    if (snapshot.val().state == 'disconnected') {
+      // this is pretty ensecure.  One player should not be able to delete another..
+      snapshot.ref().remove();
+      return
+    }
+
+    if (snapshot.name() == this.playerRef.name()) {
+      this.streamFrames = true;
+    }else{
+      this.watchPlayer(snapshot);
+    }
+  }.bind(Game);
 
 
   Game.watchPlayer = function (snapshot) {

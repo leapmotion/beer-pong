@@ -58,7 +58,7 @@
   LeapHandler.shareFrameDataProtocol = function(localFrameData){
     var eventOrFrame = LeapHandler.originalProtocol(localFrameData);
 
-    if (localFrameData.id % 4 == 0){
+    if (localFrameData.id % 4 == 0 && localFrameData.hands.length){
       Game.sendFrame(localFrameData);
     }
 
