@@ -1,6 +1,7 @@
 window.TO_RAD = Math.PI / 180;
 window.TO_DEG = 1 / TO_RAD;
 
+// wat
 var booSound = document.getElementById('boo');
 booSound.addEventListener('ended', function() { booSound.load(); });
 
@@ -16,14 +17,17 @@ booSound.addEventListener('ended', function() { booSound.load(); });
   .use('playback')
   .on('frame', function(frame){
     var hand, mesh;
-    if (!frame.hands[0]) return;
 
-    LeapHandler.enableFrameSending();
+    document.getElementById('handsHud').innerHTML = frame.hands.length;
+    document.getElementById('streamingHud').innerHTML = LeapHandler.streaming;
+    document.getElementById('firebaseHud').innerHTML = Game.playerCount;
 
-    // send only every fourth frame
-    if (frame.id % 4){
-      LeapHandler.sendLatestFrame()
+    if (frame.valid && frame.local && !LeapHandler.streaming) {
+      LeapHandler.streaming = true;
+      LeapHandler.enableFrameSharing();
     }
+
+    if (!frame.hands[0]) return;
 
     hand = frame.hands[0];
     mesh = hand.data('riggedHand.mesh');
@@ -34,21 +38,13 @@ booSound.addEventListener('ended', function() { booSound.load(); });
 
   });
 
+// give a second to connect before immediately starting shared-frame-watching
+setTimeout(function () {
+  LeapHandler.updateSharedFramesLoop();
+}, 1000);
+
+controller.on('disconnect',         function(){ LeapHandler.streaming = false; LeapHandler.updateSharedFramesLoop(); });
+controller.on('deviceDisconnected', function(){ LeapHandler.streaming = false; LeapHandler.updateSharedFramesLoop(); });
+
 LeapHandler.playback = controller.plugins.playback.player;
 Game.begin();
-
-
-
-
-
-//if (gameId) {
-//  firebase.child('/games/' + gameId + '/turns').on('child_added', function (turn) {
-//    Game.overlay(turn.val().name + ' throws!');
-//    controller.use('playback', {
-//      autoPlay: true,
-//      recording: 'perfection.lz',
-//      pauseOnHand: false,
-//      loop: true
-//    });
-//  });
-//}

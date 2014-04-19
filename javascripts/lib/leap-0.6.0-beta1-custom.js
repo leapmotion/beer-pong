@@ -2776,7 +2776,11 @@ var JSONProtocol = exports.JSONProtocol = function(version) {
     if (data.event) {
       return new Event(data.event);
     } else {
+
       var frame = new Frame(data);
+      // hacked in by peter
+      frame.local = true;
+
       return frame;
     }
   };

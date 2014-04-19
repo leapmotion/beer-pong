@@ -30,10 +30,14 @@
 
   Game.framesSent = 0;
   Game.framesReceived = 0;
+  Game.playerCount = 1;
+  Game.streamFrames = false;
 
   // firebase structure:
   // /game/<id>/players/<id>/frames
   Game.connectToLiveGame = function () {
+    console.log('Connecting to server');
+    console.time('firebase-connection');
     if (this.id()) {
       this.gameRef = firebaseGamesRef.child(this.id());
       this.gameRef.once('value', function (snapshot) {
@@ -51,6 +55,7 @@
   }
 
   Game.setupPlayers = function () {
+    console.timeEnd('firebase-connection');
     // todo: hook name to session ID
     this.playersRef = this.gameRef.child('players'); // will this be created automatically?
 
@@ -65,7 +70,9 @@
     this.playersRef.on('child_added', function (snapshot) {
       if (snapshot.val().state == 'disconnected') return;
 
-      if (snapshot.name() != this.playerRef.name()) {
+      if (snapshot.name() == this.playerRef.name()) {
+        this.streamFrames = true;
+      }else{
         this.watchPlayer(snapshot);
       }
     }.bind(this));
@@ -79,6 +86,11 @@
 
   Game.watchPlayer = function (snapshot) {
     console.log('Watching player', snapshot.val().name);
+    console.log(snapshot, snapshot.val());
+    if (!snapshot.val().name){
+      console.warn("No player name on watched player", snapshot.name());
+    }
+    Game.playerCount++;
 
     // are frames actually removed here?
     this.playersRef.child(snapshot.name()).child('/frames').limit(10).on('child_added', Game.receiveFrame);
@@ -86,7 +98,8 @@
 
 
   Game.sendFrame = function (frame) {
-    if (!this.framesRef) {
+    // we check streamFrames as it looks like it may take a moment for the ref to be ready
+    if (!this.framesRef || !this.streamFrames) {
       return;
     }
     // clip old frame data after ~500 frames
@@ -110,10 +123,8 @@
 
 
   Game.receiveFrame = function (snapshot) {
-    var userId = snapshot.ref().toString()
-    console.log('we need to regex player name from snapshot', snapshot, userId);
-    debugger
-    this.framesReceived++;
+    var userId = snapshot.ref().toString().match(/players\/(.+?)\//)[1];
+    Game.framesReceived++;
 
     var frameData = snapshot.val().frame;
 
@@ -135,7 +146,7 @@
 
 
   Game.begin = function () {
-//    this.connectToLiveGame();
+    this.connectToLiveGame();
 
     // connect or create game by id
 

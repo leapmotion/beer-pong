@@ -147,11 +147,15 @@
       renderer.setSize( window.innerWidth, window.innerHeight );
   }, false );
 
-
+  // todo: update hud method
+  var frameTrafficHud = document.getElementById('frameTraffic');
   var ballPositionHud = document.getElementById('ballPosition');
+
   window.render = function() {
     // todo: should used estimated time in which the object will be rendered to the screen
-    var thisFrameTime = (new Date).getTime()
+    var thisFrameTime = (new Date).getTime();
+
+
 
     cameraCube.rotation.copy( camera.rotation );
     controls.update();
@@ -178,6 +182,7 @@
     }
 
     ballPositionHud.innerHTML = pongBall.position.toArray().map(function(num){return Math.round(num)});
+    frameTrafficHud.innerHTML = Game.framesSent +  '/' + Game.framesReceived;
 
     renderer.render(sceneCube, cameraCube);
     renderer.render(scene, camera);
