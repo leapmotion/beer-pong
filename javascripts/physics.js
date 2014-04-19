@@ -18,19 +18,18 @@
   // this controls the bouncyness of the ball
   // (we could create a new contact material with both the table material and ball material
   // instead, just change the global contactmaterial)
-  world.defaultContactMaterial.restitution = 0.99;
+  world.defaultContactMaterial.restitution = 0.95;
 
 
   THREE.Mesh.prototype.addPhysics = function(){
-    if (this.geometry instanceof THREE.SphereGeometry){
+    if (this.geometry instanceof THREE.SphereGeometry) {
       // for some reason, we double the pong ball radius in order to make it not go in to table.
-      var mass = 5, radius = 2;
+      var mass = 5, radius = 1;
 
       var sphereShape = new CANNON.Sphere(radius);
       var sphereBody = new CANNON.RigidBody(mass, sphereShape);
       this.physicsObject = sphereBody;
 
-      sphereBody.position.set(0, 50, 50);
       sphereBody.linearDamping = linearDamping;
 
       world.add(sphereBody);
@@ -40,7 +39,8 @@
         sceneObject: pongBall
       });
 
-    }else {
+    } else if (this.geometry instanceof THREE.CircleGeometry) {
+    } else {
       throw "Unsupported physics on" + this.geometry
     }
   }
