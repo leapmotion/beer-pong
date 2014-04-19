@@ -196,6 +196,15 @@
       }
     }
 
+    var lostHeight = -10;
+    if (pongBall.position.y < lostHeight && !pongBall.belowTable && !pongBall.inHand) {
+      booSound.play();
+      pongBall.belowTable = true;
+    } else if (pongBall.position.y >= lostHeight && pongBall.belowTable) {
+      pongBall.belowTable = false;
+    }
+
+
     ballPositionHud.innerHTML = pongBall.position.toArray().map(function(num){return Math.round(num)});
 
     renderer.render(sceneCube, cameraCube);

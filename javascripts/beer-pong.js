@@ -33,14 +33,6 @@ booSound.addEventListener('ended', function() { booSound.load(); });
     LeapHandler.trackThrow(hand, mesh);
     LeapHandler.updateHud(hand, mesh);
 
-    var lostHeight = -10;
-    if (pongBall.position.y < lostHeight && !pongBall.belowTable && !pongBall.inHand) {
-      booSound.play();
-      pongBall.belowTable = true;
-    } else if (pongBall.position.y >= lostHeight && pongBall.belowTable) {
-      pongBall.belowTable = false;
-    }
-
   });
 
 LeapHandler.playback = controller.plugins.playback.player;
