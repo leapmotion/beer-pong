@@ -68,11 +68,11 @@
       // may need to use constraints for this
       pongBall.inHand = true;
       pongBall.position.copy(mesh.position);
-      pongBall.physicsObject.velocity.set.apply(
-        pongBall.physicsObject.velocity,
-        //  hand.palmVelocity.map(function(num){ return num / 2000})  // this would be instantaneous velocity
-        hand.velocity.map(function (num) { return num / 80 })
-      )
+      //pongBall.physicsObject.velocity.set.apply(
+      //  pongBall.physicsObject.velocity,
+      //  //  hand.palmVelocity.map(function(num){ return num / 2000})  // this would be instantaneous velocity
+      //  hand.velocity.map(function (num) { return num / 80 })
+      //)
     } else {
       pongBall.inHand = false;
 

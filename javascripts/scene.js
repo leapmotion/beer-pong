@@ -1,5 +1,12 @@
 (function(){
-  scene = new THREE.Scene();
+  scene = new Physijs.Scene();
+  scene.setGravity(0, -1, 0);
+  scene.addEventListener(
+    'update',
+    function() {
+      scene.simulate( undefined, 2 );
+    }
+  );
   sceneCube = new THREE.Scene();
   renderer = new THREE.WebGLRenderer({alpha: false});
 
@@ -44,11 +51,12 @@
 
 
 
-  scene.table = new THREE.Mesh(
+  scene.table = new Physijs.BoxMesh(
     new THREE.CubeGeometry(50, 1.8, 83),
-    new THREE.MeshPhongMaterial({
+    Physijs.createMaterial(new THREE.MeshPhongMaterial({
       color: 0x003000
-    })
+    }), 0.0001, 0.9999),
+    0
   );
   scene.add(scene.table);
 
@@ -98,11 +106,20 @@
 
 
 
-  pongBall = new THREE.Mesh(
+  pongBall = new Physijs.SphereMesh(
     // function ( radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength ) {
     new THREE.SphereGeometry(1),
-    new THREE.MeshPhongMaterial(0x0000ff)
-  )
+    Physijs.createMaterial(new THREE.MeshPhongMaterial(0x0000ff), 0.00001, 1.5),
+    1
+  );
+  var collisionSound = document.getElementById('collision');
+  scene.table.addEventListener('collision', function() {
+    collisionSound.play();
+  });
+  collisionSound.addEventListener('ended', function() { collisionSound.load(); });
+
+
+  pongBall.position.set(0,30,0)
   pongBall.castShadow = true;
   pongBall.receiveShadow = true;
   scene.add(pongBall);
@@ -169,32 +186,9 @@
 
   var ballPositionHud = document.getElementById('ballPosition');
   window.render = function() {
-    // todo: should used estimated time in which the object will be rendered to the screen
-    var thisFrameTime = (new Date).getTime()
 
     cameraCube.rotation.copy( camera.rotation );
     controls.update();
-
-    window.world.step(thisFrameTime - lastFrameTime);
-    lastFrameTime = thisFrameTime;
-
-    for (var i = 0; i < window.physicsObjects.length; i++){
-      var physicsObject = window.physicsObjects[i].physicsObject;
-      var sceneObject   = window.physicsObjects[i].sceneObject;
-      if (sceneObject.inHand){
-        // CANNON treats this as a copyTO :-/
-        physicsObject.position.set.apply(physicsObject.position, sceneObject.position.toArray())
-      }
-      else{
-        sceneObject.position.copy(physicsObject.position);
-        // see https://github.com/schteppe/cannon.js/issues/133
-        // sceneObject.quaternion.copy(physicsObject.quaternion);
-        sceneObject.quaternion._x = physicsObject.quaternion.x;
-        sceneObject.quaternion._y = physicsObject.quaternion.y;
-        sceneObject.quaternion._z = physicsObject.quaternion.z;
-        sceneObject.quaternion._w = physicsObject.quaternion.w;
-      }
-    }
 
     var lostHeight = -10;
     if (pongBall.position.y < lostHeight && !pongBall.belowTable && !pongBall.inHand) {
@@ -207,10 +201,10 @@
 
     ballPositionHud.innerHTML = pongBall.position.toArray().map(function(num){return Math.round(num)});
 
+    scene.simulate(5);
     renderer.render(sceneCube, cameraCube);
     renderer.render(scene, camera);
     requestAnimationFrame(render);
   };
-  var lastFrameTime = (new Date).getTime()
 
 }).call(this);
