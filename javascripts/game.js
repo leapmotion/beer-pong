@@ -74,7 +74,10 @@
       name: myName,
       state: 'joining' // will be turned in to "playing" later.
     });
-    console.log('Joining as', myName, '(' + this.playerRef.name() + ')');
+
+    this.userId = this.playerRef.name();
+
+    console.log('Joining as', myName, '(' + this.userId + ')');
 
     this.playersRef.on('child_added', this.playerJoined);
 
@@ -113,7 +116,7 @@
   }
 
 
-  Game.sendFrame = function (frame) {
+  Game.shareFrameData = function (frame) {
     // we check streamFrames as it looks like it may take a moment for the ref to be ready
     if (!this.framesRef || !this.streamFrames) {
       return;
@@ -131,7 +134,7 @@
 
     this.recentSentFrames.push(this.framesRef.push(frameData));
 
-    // remove old frames
+    // remove old frames from firebase
     if (this.recentSentFrames.length > 10){
       this.recentSentFrames.shift().remove();
     }
