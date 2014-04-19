@@ -56,9 +56,9 @@
       var current = [0,0,0];
       historyTotal.push(hand.palmVelocity);
       for (var i = 0; i<historyTotal.length; i++) {
-        current[0] += historyTotal[i][0] * 0.0035/2;
-        current[1]  += historyTotal[i][1] * 0.0045/2;
-        current[2]  += historyTotal[i][2] * 0.0045/2;
+        current[0] += historyTotal[i][0] * 0.0045;
+        current[1]  += historyTotal[i][1] * 0.0045;
+        current[2]  += historyTotal[i][2] * 0.0045;
       }
       return current;
     });
@@ -68,22 +68,11 @@
       // may need to use constraints for this
       pongBall.inHand = true;
       pongBall.position.copy(mesh.position);
-      //pongBall.physicsObject.velocity.set.apply(
-      //  pongBall.physicsObject.velocity,
-      //  //  hand.palmVelocity.map(function(num){ return num / 2000})  // this would be instantaneous velocity
-      //  hand.velocity.map(function (num) { return num / 80 })
-      //)
+      pongBall.__dirtyPosition = true;
+      pongBall.setLinearVelocity({x: hand.velocity[0], y: hand.velocity[1], z: hand.velocity[2]});
+      console.log(pongBall.velocity);
     } else {
       pongBall.inHand = false;
-
-      var lostHeight = -10;
-      if (pongBall.position.y < lostHeight && !pongBall.belowTable) {
-        booSound.play();
-        pongBall.belowTable = true;
-      } else if (pongBall.position.y >= lostHeight && pongBall.belowTable) {
-        pongBall.belowTable = false;
-      }
-
     }
 
   }

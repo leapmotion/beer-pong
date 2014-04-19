@@ -55,7 +55,7 @@
     new THREE.CubeGeometry(50, 1.8, 83),
     Physijs.createMaterial(new THREE.MeshPhongMaterial({
       color: 0x003000
-    }), 0.0001, 0.9999),
+    }), 0.0000001, 1),
     0
   );
   scene.add(scene.table);
@@ -109,7 +109,7 @@
   pongBall = new Physijs.SphereMesh(
     // function ( radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength ) {
     new THREE.SphereGeometry(1),
-    Physijs.createMaterial(new THREE.MeshPhongMaterial(0x0000ff), 0.00001, 1.5),
+    Physijs.createMaterial(new THREE.MeshPhongMaterial(0x0000ff), 0.0000001, 1.60),
     1
   );
   var collisionSound = document.getElementById('collision');
@@ -201,7 +201,7 @@
 
     ballPositionHud.innerHTML = pongBall.position.toArray().map(function(num){return Math.round(num)});
 
-    scene.simulate(5);
+    scene.simulate();
     renderer.render(sceneCube, cameraCube);
     renderer.render(scene, camera);
     requestAnimationFrame(render);

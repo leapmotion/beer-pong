@@ -1,6 +1,9 @@
 (function () {
   "use strict";
 
+  var applaudeSound = document.getElementById('applaude');
+  applaudeSound.addEventListener('ended', function() { applaudeSound.load(); });
+
   window.Player = function (options) {
     this.drunkeness = 0;
     this.side = options.side; // 1 or -1
@@ -28,12 +31,19 @@
 
   // adds a threejs object
   Player.prototype.addCup = function () {
-    var cylinder = new THREE.Mesh(Game.cupGeometry, Game.cupMaterial);
+    var cylinder = new Physijs.CylinderMesh(Game.cupGeometry, Game.cupMaterial, 0);
     var bottom = new THREE.Mesh(Game.cupBottomGeometry, Game.cupMaterial);
     var cupTop = new THREE.Mesh(Game.cupTopGeometry, Game.whiteMaterial);
     var cupBeer = new THREE.Mesh(Game.cupBeerGeometry, Game.beerMaterial);
     cupTop.quaternion.setFromEuler(new THREE.Euler(Math.PI/2, 0, 0, 'XYZ')); 
     cupBeer.quaternion.setFromEuler(new THREE.Euler(-Math.PI/2, 0, 0, 'XYZ')); 
+    cylinder.addEventListener('collision', function(o, velocity) {
+      if (cylinder.position.y < o.position.y && cylinder.position.distanceTo(o.position) < 4.85) {
+        scene.remove(cylinder);
+        pongBall.setLinearVelocity({x:0,y:0,z:0});
+        applaudeSound.play();
+      }
+    });
     cupTop.position.set(0,3.2,0);
     cupBeer.position.set(0,3.1,0)
     bottom.position.set(0,-3,0);
@@ -56,6 +66,7 @@
     if (offset) {
       cup.position.add(offset);
     }
+    cup.__dirtyPosition = true;
     return cup
   }
 
