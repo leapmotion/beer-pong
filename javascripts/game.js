@@ -68,6 +68,7 @@
     // todo: hook name to session ID
     this.playersRef = this.gameRef.child('players'); // will this be created automatically?
 
+    // todo: hook this shit up with a player and a side
     var myName = playerNames[Math.floor(Math.random() * playerNames.length)].replace(/\s/g, '');
 
     this.playerRef = this.playersRef.push({
