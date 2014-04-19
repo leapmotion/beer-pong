@@ -21,11 +21,13 @@
   Game.beerMaterial = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture('beer.jpg')});
 
   Game.player1 = new Player({
-    side: 'near'
+    side: 'near',
+    index: 1
   });
 
   Game.player2 = new Player({
-    side: 'far'
+    side: 'far',
+    index: 2
   });
 
   Game.id = function () {

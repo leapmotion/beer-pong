@@ -6,10 +6,20 @@
     <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap.min.css"/>
   </head>
   <body>
-    <nav id="navbar" class="navbar navbar-default" role="navigation">
-      <h1>Beer Pong Dating </h1>
-      <p class="navbar-text navbar-right"><button data-login type="button" class="btn-default navbar-btn btn">Sign in via Facebook to invite your buddies</button></p>
-    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <h1>Player 1 </h1>
+          <div id="player1cups"> </div>
+        </div>
+        <div class="col-md-6">
+        </div>
+        <div class="col-md-3">
+          <h2>Player 2 </h1>
+          <div id="player2cups"> </div>
+        </div>
+      </div>
+    </div>
 
     <div id="hud" onmousedown="event.stopPropagation();" class="debug">
       <!-- this should be angular: -->

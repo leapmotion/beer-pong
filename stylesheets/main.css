@@ -49,3 +49,10 @@ body {
   z-index: 10;
   bottom: 10px;
   left: 148px; }
+
+div {
+  position: relative;
+  z-index: 3;
+  color: white;
+  font-size: 13pt;
+  font-weight: bold; }
