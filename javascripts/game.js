@@ -7,8 +7,6 @@
   window.Game = {};
   var cupRadius = 3;
 
-  Game.frameCompression = false;
-
   Game.cupPlacementDistance = cupRadius * 1.7;
 
   //  CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments, heightSegments, openEnded)
@@ -72,13 +70,17 @@
     // todo: hook name to session ID
     this.playersRef = this.gameRef.child('players'); // will this be created automatically?
 
+    // todo: hook this shit up with a player and a side
     var myName = playerNames[Math.floor(Math.random() * playerNames.length)].replace(/\s/g, '');
 
     this.playerRef = this.playersRef.push({
       name: myName,
       state: 'joining' // will be turned in to "playing" later.
     });
-    console.log('Joining as', myName, '(' + this.playerRef.name() + ')');
+
+    this.userId = this.playerRef.name();
+
+    console.log('Joining as', myName, '(' + this.userId + ')');
 
     this.playersRef.on('child_added', this.playerJoined);
 
@@ -117,7 +119,7 @@
   }
 
 
-  Game.sendFrame = function (frame) {
+  Game.shareFrameData = function (frame) {
     // we check streamFrames as it looks like it may take a moment for the ref to be ready
     if (!this.framesRef || !this.streamFrames) {
       return;
@@ -133,13 +135,9 @@
       }
     }
 
-    if (this.frameCompression) {
-      frameData.frame = LZString.compressToBase64(frameData.frame);
-    }
-
     this.recentSentFrames.push(this.framesRef.push(frameData));
 
-    // remove old frames
+    // remove old frames from firebase
     if (this.recentSentFrames.length > 10){
       this.recentSentFrames.shift().remove();
     }
@@ -152,10 +150,6 @@
     Game.framesReceived++;
 
     var frameData = snapshot.val().frame;
-
-    if (this.frameCompression) {
-      frameData = LZString.decompressFromBase64(frameData);
-    }
 
     //    no leap or :
     //

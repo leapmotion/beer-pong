@@ -41,6 +41,42 @@
     window.controller.connection.protocol = this.shareFrameDataProtocol;
   }
 
+  // takes in a frame from the local machine
+  LeapHandler.shareFrameDataProtocol = function(localFrameData){
+    var eventOrFrame = LeapHandler.originalProtocol(localFrameData);
+
+    if (eventOrFrame instanceof Leap.Frame) {
+      LeapHandler.updateFrameObjectIds(localFrameData);
+
+      if (localFrameData.id % 2 == 0 && localFrameData.hands.length){
+        Game.shareFrameData(localFrameData);
+      }
+
+      // this means creating double frames every time. eh.
+      eventOrFrame = LeapHandler.createSplicedFrame(localFrameData);
+    }
+
+    return eventOrFrame;
+  }
+
+  // converts hand and pointable integer IDs to UUIDs
+  LeapHandler.updateFrameObjectIds = function(frameData){
+    var i, hand, pointable;
+
+    for (i = 0; i < frameData.hands.length; i++) {
+      hand = frameData.hands[i];
+      hand.id = hand.id + Game.userId;
+      hand.userId = Game.userId;
+    }
+
+    for (i = 0; i < frameData.pointables.length; i++) {
+      pointable = frameData.pointables[i];
+      pointable.id = pointable.id + Game.userId;
+      pointable.handId = pointable.handId + Game.userId;
+    }
+  }
+
+
   LeapHandler.createSplicedFrame = function(localFrameData){
 
     // C&P out of recordFrameHandler, but without the call to finishRecording
@@ -54,22 +90,6 @@
     return new Leap.Frame(localFrameData);
   }
 
-  // takes in a frame from the local machine
-  LeapHandler.shareFrameDataProtocol = function(localFrameData){
-    var eventOrFrame = LeapHandler.originalProtocol(localFrameData);
-
-    if (localFrameData.id % 4 == 0 && localFrameData.hands.length){
-      Game.sendFrame(localFrameData);
-    }
-
-    if (eventOrFrame instanceof Leap.Frame) {
-      // this means creating double frames every time. eh.
-      eventOrFrame = LeapHandler.createSplicedFrame(localFrameData);
-    }
-    return eventOrFrame;
-  }
-
-
   // we merge two frames together, customizing as we go
   // IDs become ID + userId.  e.g., "60900
   LeapHandler.spliceInSharedFrames = function(frameData){
@@ -77,23 +97,13 @@
 
     for (userId in this.userFrames){
       userFrame = this.userFrames[userId];
-//      console.log('splice', userFrame.id);
 
       if (userFrame.hands){ // not sure why
         for (i = 0; i < userFrame.hands.length; i++){
-          hand = userFrame.hands[i];
-          hand.id = hand.id + userId;
-          hand.userId = userId;
-
-          frameData.hands.push(hand);
+          frameData.hands.push(userFrame.hands[i]);
         }
-
         for (i = 0; i < userFrame.pointables.length; i++){
-          pointable = userFrame.pointables[i];
-          pointable.id     = pointable.id     + userId;
-          pointable.handId = pointable.handId + userId;
-
-          frameData.pointables.push(pointable);
+          frameData.pointables.push(userFrame.pointables[i]);
         }
       }
 
@@ -162,7 +172,6 @@
       pongBall.position.copy(mesh.position);
       pongBall.__dirtyPosition = true;
       pongBall.setLinearVelocity({x: hand.velocity[0], y: hand.velocity[1], z: hand.velocity[2]});
-      console.log(pongBall.velocity);
     } else {
       pongBall.inHand = false;
     }
