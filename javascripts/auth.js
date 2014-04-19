@@ -1,6 +1,5 @@
 (function () {
-  window.firebase = new Firebase('https://intense-fire-8508.firebaseio.com/');
-  window.firebaseGamesRef = firebase.child('games');
+  window.firebase = new Firebase('https://leap-beerpong-dev.firebaseio.com/');
 
   var auth = new FirebaseSimpleLogin(firebase, function (error, user) {
 

@@ -1,17 +1,27 @@
 (function () {
+  "use strict";
 
-  window.LeapHandler = {}
+  // This class handles two things:
+  // - Frame Callbacks for gameplay
+  // - Frame sharing between players
+
+  window.LeapHandler = {};
+
+  // streaming hasn't yet made it in to 0.6.0-beta1
+  LeapHandler.streaming = false;
+  LeapHandler.frameSharingEnabled = false;
 
   var palmPositionHud = document.getElementById('palmPosition');
   var palmVelocityHud = document.getElementById('palmVelocity');
   var tipAvgVelHud = document.getElementById('tipAvgVel');
   var pinchStrHud = document.getElementById('pinchStr');
-  var frameTrafficHud = document.getElementById('frameTraffic');
+
 
   // Keys are firebase player IDs
   // Values are the most-recent frame from that player
   // This data is used by the animation loop
-  LeapHandler.userFrames = {}
+  LeapHandler.userFrames = {};
+
 
   // gets set after Leap controller is set up.
   this.playback = undefined;
@@ -22,29 +32,111 @@
   }
 
 
-  LeapHandler.enableFrameSending = function () {
-    if (LeapHandler.playback.state != 'recording') {
-      // we can't put this on ready because of strange "unrecognized version" error in chooseProtocol.
-      LeapHandler.playback.record();
+  LeapHandler.enableFrameSharing = function () {
+    if (this.frameSharingEnabled) return;
+    this.frameSharingEnabled = true;
+    // This sorely needs proper LeapJS support
+
+    this.originalProtocol = window.controller.connection.protocol;
+    window.controller.connection.protocol = this.shareFrameDataProtocol;
+  }
+
+  LeapHandler.createSplicedFrame = function(localFrameData){
+
+    // C&P out of recordFrameHandler, but without the call to finishRecording
+    LeapHandler.playback.setGraphic('wave');
+    if (localFrameData.hands.length > 0){
+      LeapHandler.playback.frameData.push(localFrameData);
+      LeapHandler.playback.hideOverlay();
+    }
+
+    LeapHandler.spliceInSharedFrames(localFrameData);
+    return new Leap.Frame(localFrameData);
+  }
+
+  // takes in a frame from the local machine
+  LeapHandler.shareFrameDataProtocol = function(localFrameData){
+    var eventOrFrame = LeapHandler.originalProtocol(localFrameData);
+
+    if (localFrameData.id % 4 == 0 && localFrameData.hands.length){
+      Game.sendFrame(localFrameData);
+    }
+
+    if (eventOrFrame instanceof Leap.Frame) {
+      // this means creating double frames every time. eh.
+      eventOrFrame = LeapHandler.createSplicedFrame(localFrameData);
+    }
+    return eventOrFrame;
+  }
+
+
+  // we merge two frames together, customizing as we go
+  // IDs become ID + userId.  e.g., "60900
+  LeapHandler.spliceInSharedFrames = function(frameData){
+    var i, hand, pointable, userFrame, userId; // no pointable support for now
+
+    for (userId in this.userFrames){
+      userFrame = this.userFrames[userId];
+//      console.log('splice', userFrame.id);
+
+      if (userFrame.hands){ // not sure why
+        for (i = 0; i < userFrame.hands.length; i++){
+          hand = userFrame.hands[i];
+          hand.id = hand.id + userId;
+          hand.userId = userId;
+
+          frameData.hands.push(hand);
+        }
+
+        for (i = 0; i < userFrame.pointables.length; i++){
+          pointable = userFrame.pointables[i];
+          pointable.id     = pointable.id     + userId;
+          pointable.handId = pointable.handId + userId;
+
+          frameData.pointables.push(pointable);
+        }
+      }
+
+// Actually, we can't do that, because the local framerate is greater than the remote.
+//      // This is important as it means if one player stops sending frames,
+//      // they disappear:
+//      delete this.userFrames[userId];
     }
   }
 
+  // When the controller is not connected, this makes sure frame data gets used and emitted
+  LeapHandler.updateSharedFramesLoop = function(){
+    if (this.streaming) return;
+    var userId, frameData, frame;
 
-  LeapHandler.sendLatestFrame = function(){
-    // it takes 1 frame to begin recording, so we check length too
-    if (!this.playback.frameData.length){ return }
+    // take the first frame as the "master" frame which others are added to
+    for (userId in this.userFrames){
+      break;
+    }
 
-    Game.sendFrame(LeapHandler.playback.frameData[this.playback.frameData.length -1]);
 
-    // Clean up old frames to prevent massive memory overload.
-    LeapHandler.playback.frameData.shift()
-  }
+    if (userId){
+      frameData = this.userFrames[userId];
+      delete this.userFrames[userId];
+      this.spliceInSharedFrames(frameData);
+
+      frame = new Leap.Frame(frameData);
+      console.log('observer loop. hands:', frame.hands.length);
+
+      // send a deviceFrame to the controller:
+      // this frame gets picked up by the controllers own animation loop.
+      // todo: might be introducing an artificial frame of lag here :-/
+      window.controller.processFrame(frame);
+    }
+
+
+    window.requestAnimationFrame(this.updateSharedFramesLoop);
+  }.bind(LeapHandler);
 
 
   LeapHandler.updateHud = function(hand, mesh){
     palmPositionHud.innerHTML = mesh.position.toArray().map(function(num){return Math.round(num)});
     palmVelocityHud.innerHTML = hand.palmVelocity.map(function(num){return Math.round(num)});
-    frameTrafficHud.innerHTML = Game.framesSent +  '/' + Game.framesReceived;
     pinchStrHud.innerHTML = hand.pinchStrength;
     tipAvgVelHud.innerHTML = hand.velocity.map(function(num){ return num.toPrecision(2) });
   }

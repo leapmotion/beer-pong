@@ -35,19 +35,29 @@
 
   Game.framesSent = 0;
   Game.framesReceived = 0;
+  Game.playerCount = 1;
+  Game.streamFrames = false;
+
+  // we track the most recently sent frames, and delete any if the list gets larger than 10.
+  Game.recentSentFrames = [];
+
+  Game.gamesRef = window.firebase.child('games');
 
   // firebase structure:
   // /game/<id>/players/<id>/frames
   Game.connectToLiveGame = function () {
+    console.log('Connecting to server');
+    console.time('firebase-connection');
     if (this.id()) {
-      this.gameRef = firebaseGamesRef.child(this.id());
+      this.gameRef = this.gamesRef.child(this.id());
       this.gameRef.once('value', function (snapshot) {
         console.log('Connected to game ' + this.gameRef.name() + ', created:  ' + new Date(snapshot.val().created_at))
+
         this.setupPlayers();
       }.bind(this));
     } else {
       // push appears to be synchronous. IDs are generated locally.
-      this.gameRef = firebaseGamesRef.push({created_at: (new Date()).getTime()});
+      this.gameRef = this.gamesRef.push({created_at: (new Date()).getTime()});
       console.log('Created game', this.gameRef.name());
       window.location.hash = '#' + this.gameRef.name();
 
@@ -56,6 +66,7 @@
   }
 
   Game.setupPlayers = function () {
+    console.timeEnd('firebase-connection');
     // todo: hook name to session ID
     this.playersRef = this.gameRef.child('players'); // will this be created automatically?
 
@@ -67,31 +78,46 @@
     });
     console.log('Joining as', myName, '(' + this.playerRef.name() + ')');
 
-    this.playersRef.on('child_added', function (snapshot) {
-      if (snapshot.val().state == 'disconnected') return;
+    this.playersRef.on('child_added', this.playerJoined);
 
-      if (snapshot.name() != this.playerRef.name()) {
-        this.watchPlayer(snapshot);
-      }
-    }.bind(this));
-
+    // do cleanup here?
     this.playerRef.child('state').onDisconnect().set('disconnected');
 
     this.framesRef = this.playerRef.child('frames');
     console.log('ready to send frames!');
   }
 
+  Game.playerJoined = function(snapshot){
+    if (snapshot.val().state == 'disconnected') {
+      // this is pretty ensecure.  One player should not be able to delete another..
+      snapshot.ref().remove();
+      return
+    }
+
+    if (snapshot.name() == this.playerRef.name()) {
+      this.streamFrames = true;
+    }else{
+      this.watchPlayer(snapshot);
+    }
+  }.bind(Game);
+
 
   Game.watchPlayer = function (snapshot) {
     console.log('Watching player', snapshot.val().name);
+    console.log(snapshot, snapshot.val());
+    if (!snapshot.val().name){
+      console.warn("No player name on watched player", snapshot.name());
+    }
+    Game.playerCount++;
 
     // are frames actually removed here?
-    this.playersRef.child(snapshot.name()).child('/frames').limit(10).on('child_added', Game.receiveFrame);
+    this.playersRef.child(snapshot.name() + '/frames').limit(10).on('child_added', Game.receiveFrame);
   }
 
 
   Game.sendFrame = function (frame) {
-    if (!this.framesRef) {
+    // we check streamFrames as it looks like it may take a moment for the ref to be ready
+    if (!this.framesRef || !this.streamFrames) {
       return;
     }
     // clip old frame data after ~500 frames
@@ -109,16 +135,19 @@
       frameData.frame = LZString.compressToBase64(frameData.frame);
     }
 
-    this.framesRef.push(frameData);
+    this.recentSentFrames.push(this.framesRef.push(frameData));
+
+    // remove old frames
+    if (this.recentSentFrames.length > 10){
+      this.recentSentFrames.shift().remove();
+    }
     this.framesSent++;
   }
 
 
   Game.receiveFrame = function (snapshot) {
-    var userId = snapshot.ref().toString()
-    console.log('we need to regex player name from snapshot', snapshot, userId);
-    debugger
-    this.framesReceived++;
+    var userId = snapshot.ref().toString().match(/players\/(.+?)\//)[1];
+    Game.framesReceived++;
 
     var frameData = snapshot.val().frame;
 
@@ -140,7 +169,7 @@
 
 
   Game.begin = function () {
-//    this.connectToLiveGame();
+    this.connectToLiveGame();
 
     // connect or create game by id
 
