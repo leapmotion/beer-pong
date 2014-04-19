@@ -7,8 +7,6 @@
   window.Game = {};
   var cupRadius = 3;
 
-  Game.frameCompression = false;
-
   Game.cupPlacementDistance = cupRadius * 1.7;
 
   //  CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments, heightSegments, openEnded)
@@ -131,10 +129,6 @@
       }
     }
 
-    if (this.frameCompression) {
-      frameData.frame = LZString.compressToBase64(frameData.frame);
-    }
-
     this.recentSentFrames.push(this.framesRef.push(frameData));
 
     // remove old frames
@@ -150,10 +144,6 @@
     Game.framesReceived++;
 
     var frameData = snapshot.val().frame;
-
-    if (this.frameCompression) {
-      frameData = LZString.decompressFromBase64(frameData);
-    }
 
     //    no leap or :
     //
