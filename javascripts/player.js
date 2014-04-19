@@ -29,8 +29,19 @@
   // adds a threejs object
   Player.prototype.addCup = function () {
     var cylinder = new THREE.Mesh(Game.cupGeometry, Game.cupMaterial);
-    cylinder.castShadow = true;
-    cylinder.receiveShadow = true;
+    var bottom = new THREE.Mesh(Game.cupBottomGeometry, Game.cupMaterial);
+    var cupTop = new THREE.Mesh(Game.cupTopGeometry, Game.whiteMaterial);
+    var cupBeer = new THREE.Mesh(Game.cupBeerGeometry, Game.beerMaterial);
+    cupTop.quaternion.setFromEuler(new THREE.Euler(Math.PI/2, 0, 0, 'XYZ')); 
+    cupBeer.quaternion.setFromEuler(new THREE.Euler(-Math.PI/2, 0, 0, 'XYZ')); 
+    cupTop.position.set(0,3.2,0);
+    cupBeer.position.set(0,3.1,0)
+    bottom.position.set(0,-3,0);
+    bottom.castShadow = cylinder.castShadow = true;
+    bottom.castShadow = cylinder.receiveShadow = true;
+    cylinder.add(cupBeer);
+    cylinder.add(bottom);
+    cylinder.add(cupTop);
     scene.add(cylinder);
     this.cups.push(cylinder);
     return cylinder;
@@ -40,6 +51,7 @@
     var previousPosition = this.cups[this.cups.length - 1]
     var cup = this.addCup();
     cup.position.copy(this.pointPosition);
+    cup.position.y = 4.5;
 
     if (offset) {
       cup.position.add(offset);

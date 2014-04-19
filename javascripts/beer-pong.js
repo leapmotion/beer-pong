@@ -16,6 +16,8 @@ booSound.addEventListener('ended', function() { booSound.load(); });
   .connect()
   .use('playback')
   .on('frame', function(frame){
+
+  pongBall.position.set(0,50,0);
     var hand, mesh;
 
     document.getElementById('handsHud').innerHTML = frame.hands.length;
@@ -33,7 +35,6 @@ booSound.addEventListener('ended', function() { booSound.load(); });
     mesh = hand.data('riggedHand.mesh');
 
     LeapHandler.trackThrow(hand, mesh);
-
     LeapHandler.updateHud(hand, mesh);
 
   });
