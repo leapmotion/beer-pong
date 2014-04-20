@@ -46,7 +46,7 @@
     var eventOrFrame = LeapHandler.originalProtocol(localFrameData);
 
     if (eventOrFrame instanceof Leap.Frame) {
-      LeapHandler.updateFrameObjectIds(localFrameData);
+      LeapHandler.makeIdsUniversal(localFrameData);
 
       if (localFrameData.id % 2 == 0 && localFrameData.hands.length){
         Game.shareFrameData(localFrameData);
@@ -60,7 +60,7 @@
   }
 
   // converts hand and pointable integer IDs to UUIDs
-  LeapHandler.updateFrameObjectIds = function(frameData){
+  LeapHandler.makeIdsUniversal = function(frameData){
     var i, hand, pointable;
 
     for (i = 0; i < frameData.hands.length; i++) {
