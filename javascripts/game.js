@@ -19,11 +19,13 @@
   Game.beerMaterial = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture('beer.jpg')});
 
   Game.player1 = new Player({
-    side: 'near'
+    side: 'near',
+    index: 1
   });
 
   Game.player2 = new Player({
-    side: 'far'
+    side: 'far',
+    index: 2
   });
 
   Game.id = function () {
@@ -97,8 +99,10 @@
     }
 
     if (snapshot.name() == this.playerRef.name()) {
+//      $('#player2name').html(this.playerRef.val().name); // where's the player name??
       this.streamFrames = true;
     }else{
+//      $('#player1name').html(this.playerRef.val().name); // where's the player name??
       this.watchPlayer(snapshot);
     }
   }.bind(Game);
