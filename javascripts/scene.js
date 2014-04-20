@@ -126,7 +126,8 @@
 
 
   var geometry = new THREE.SphereGeometry( 100, 32, 16 );
-  var path = "textures/";
+  var cubemap = window.location.href.charCodeAt(window.location.href.length-1) % 2 === 0 ? 'beach' : 'tenerife';
+  var path = "textures/"+cubemap+"/";
   var format = '.jpg';
   var urls = [
       path + 'px' + format, path + 'nx' + format,
