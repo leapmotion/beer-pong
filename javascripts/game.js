@@ -99,8 +99,10 @@
     }
 
     if (snapshot.name() == this.playerRef.name()) {
+//      $('#player2name').html(this.playerRef.val().name); // where's the player name??
       this.streamFrames = true;
     }else{
+//      $('#player1name').html(this.playerRef.val().name); // where's the player name??
       this.watchPlayer(snapshot);
     }
   }.bind(Game);
