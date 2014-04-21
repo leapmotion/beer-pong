@@ -43,6 +43,13 @@
 
     this.originalProtocol = window.controller.connection.protocol;
     window.controller.connection.protocol = this.shareFrameDataProtocol;
+
+    // Copy methods/properties from the default protocol over
+    for (var property in this.originalProtocol) {
+      if (this.originalProtocol.hasOwnProperty(property)) {
+        this.shareFrameDataProtocol[property] = this.originalProtocol[property]
+      }
+    }
   }
 
   // determines if a given set of local frame data is interesting and should be sent.

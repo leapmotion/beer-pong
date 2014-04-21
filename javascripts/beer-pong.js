@@ -19,9 +19,9 @@ booSound.addEventListener('ended', function() { booSound.load(); });
 
     var hand, mesh;
 
-    document.getElementById('handsHud').innerHTML = frame.hands.length;
+    document.getElementById('handsHud').innerHTML     = frame.hands.length;
     document.getElementById('streamingHud').innerHTML = LeapHandler.streamingLocalFrames;
-    document.getElementById('firebaseHud').innerHTML = Game.playerCount;
+    document.getElementById('firebaseHud').innerHTML  = Game.playerCount;
 
     if (frame.valid && frame.local && !LeapHandler.streamingLocalFrames) {
       LeapHandler.streamingLocalFrames = true;
