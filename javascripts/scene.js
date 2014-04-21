@@ -55,7 +55,7 @@
 
 
   scene.table = new Physijs.BoxMesh(
-    new THREE.CubeGeometry(50, 1.8, 83),
+    new THREE.CubeGeometry(50, 1.8, 73),
     Physijs.createMaterial(new THREE.MeshPhongMaterial({
       color: 0x003000
     }), 0.01, 0.9),
@@ -63,15 +63,15 @@
   );
   scene.table.receiveShadow = true;
   scene.table.castShadow = true;
-  var middleStripe = new THREE.Mesh( new THREE.CubeGeometry(0.3, 1.8, 83), new THREE.MeshPhongMaterial({ color: 0xffffff }));
+  var middleStripe = new THREE.Mesh( new THREE.CubeGeometry(0.3, 1.8, scene.table.geometry.depth), new THREE.MeshPhongMaterial({ color: 0xffffff }));
   middleStripe.position.set(0,0.01,0);
   scene.table.add(middleStripe);
 
-  var leftStripe = new THREE.Mesh( new THREE.CubeGeometry(0.3, 1.8, 83), new THREE.MeshPhongMaterial({ color: 0xffffff }));
+  var leftStripe = new THREE.Mesh( new THREE.CubeGeometry(0.3, 1.8, scene.table.geometry.depth), new THREE.MeshPhongMaterial({ color: 0xffffff }));
   leftStripe.position.set(scene.table.geometry.width/2,0.01,0);
   scene.table.add(leftStripe);
 
-  var rightStripe = new THREE.Mesh( new THREE.CubeGeometry(0.3, 1.8, 83), new THREE.MeshPhongMaterial({ color: 0xffffff }));
+  var rightStripe = new THREE.Mesh( new THREE.CubeGeometry(0.3, 1.8, scene.table.geometry.depth), new THREE.MeshPhongMaterial({ color: 0xffffff }));
   rightStripe.position.set(-scene.table.geometry.width/2,0.01,0);
   scene.table.add(rightStripe);
 
