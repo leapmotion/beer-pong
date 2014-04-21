@@ -119,6 +119,7 @@
 
   LeapHandler.createFrame = function(frameData){
     var frame = new Leap.Frame(frameData);
+
     frame.ballPosition = frameData.ballPosition;
     for (var i = 0; i < frameData.hands.length; i++){
       // assuming ordering is the same :-/
@@ -128,15 +129,18 @@
     return frame;
   }
 
-  // we merge two frames together, customizing as we go
-  // IDs become ID + userId.  e.g., "60900
+  // takes in a raw (local frame, usually)
+  // adds in any set the other user frames
   LeapHandler.spliceInSharedFrames = function(frameData){
     var i, userFrame, userId; // no pointable support for now
 
-
-
     for (userId in this.userFrames){
       userFrame = this.userFrames[userId];
+
+      if (userFrame.ballPosition){
+        // if ballPosition is set from master frame, use it
+        frameData.ballPosition = userFrame.ballPosition;
+      }
 
       if (userFrame.hands){ // not sure why
 
@@ -217,6 +221,7 @@
 
       if (frame.ballPosition && Game.slavePhysics()){
         pongBall.position.fromArray(frame.ballPosition)
+        pongBall.__dirtyPosition = true;
       }else{
         pongBall.mass = 1;
       }

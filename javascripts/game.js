@@ -248,7 +248,7 @@
       return
     }
 
-    latencyHud.innerHTML =  timeDifference + "ms";
+    latencyHud.innerHTML = timeDifference + "ms";
 
     //    no leap or :
     //
@@ -266,6 +266,7 @@
   Game.slavePhysics = function(){
     if (!this.player2.userId) return false;
     if (this.userId != this.player1.userId) return true;
+    return false;
   }
 
   Game.begin = function () {
