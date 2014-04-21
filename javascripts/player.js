@@ -41,7 +41,7 @@
     cupTop.quaternion.setFromEuler(new THREE.Euler(Math.PI/2, 0, 0, 'XYZ')); 
     cupBeer.quaternion.setFromEuler(new THREE.Euler(-Math.PI/2, 0, 0, 'XYZ')); 
     cylinder.addEventListener('collision', function(o, velocity) {
-      if (cylinder.position.y < o.position.y && cylinder.position.distanceTo(o.position) < 4.65) {
+      if (cylinder.position.y + cylinder.geometry.height/2 < o.position.y && cylinder.position.distanceTo(o.position) < 4.65) {
         scene.remove(cylinder);
         pongBall.setLinearVelocity({x:0,y:0,z:0});
         $('#player' + player.index + 'cups').append('<img src="images/cup.png?2">');

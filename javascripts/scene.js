@@ -1,6 +1,6 @@
 (function(){
   scene = new Physijs.Scene();
-  scene.setGravity({x: 0, y: -50, z: 0});
+  scene.setGravity({x: 0, y: -80, z: 0});
   scene.addEventListener(
     'update',
     function() {
@@ -55,30 +55,31 @@
     new THREE.CubeGeometry(50, 1.8, 83),
     Physijs.createMaterial(new THREE.MeshPhongMaterial({
       color: 0x003000
-    }), 0.0000001, 1),
+    }), 0.001, 0.99),
     0
   );
+  var middleStripe = new THREE.Mesh( new THREE.CubeGeometry(0.3, 1.8, 83), new THREE.MeshPhongMaterial({ color: 0xffffff }));
+  middleStripe.position.set(0,0.01,0);
+  scene.table.add(middleStripe);
+
+  var leftStripe = new THREE.Mesh( new THREE.CubeGeometry(0.3, 1.8, 83), new THREE.MeshPhongMaterial({ color: 0xffffff }));
+  leftStripe.position.set(scene.table.geometry.width/2,0.01,0);
+  scene.table.add(leftStripe);
+
+  var rightStripe = new THREE.Mesh( new THREE.CubeGeometry(0.3, 1.8, 83), new THREE.MeshPhongMaterial({ color: 0xffffff }));
+  rightStripe.position.set(-scene.table.geometry.width/2,0.01,0);
+  scene.table.add(rightStripe);
+
+  var frontStripe = new THREE.Mesh( new THREE.CubeGeometry(scene.table.geometry.width, 1.8, 0.3), new THREE.MeshPhongMaterial({ color: 0xffffff }));
+  frontStripe.position.set(0,0.01,scene.table.geometry.depth/2);
+  scene.table.add(frontStripe);
+
+  var backStripe = new THREE.Mesh( new THREE.CubeGeometry(scene.table.geometry.width, 1.8, 0.3), new THREE.MeshPhongMaterial({ color: 0xffffff }));
+  backStripe.position.set(0,0.01,-scene.table.geometry.depth/2);
+  scene.table.add(backStripe);
+
   scene.add(scene.table);
 
-  scene.middleStripe = new THREE.Mesh( new THREE.CubeGeometry(0.3, 1.8, 83), new THREE.MeshPhongMaterial({ color: 0xffffff }));
-  scene.middleStripe.position.set(0,0.01,0);
-  scene.add(scene.middleStripe);
-
-  scene.leftStripe = new THREE.Mesh( new THREE.CubeGeometry(0.3, 1.8, 83), new THREE.MeshPhongMaterial({ color: 0xffffff }));
-  scene.leftStripe.position.set(scene.table.geometry.width/2,0.01,0);
-  scene.add(scene.leftStripe);
-
-  scene.rightStripe = new THREE.Mesh( new THREE.CubeGeometry(0.3, 1.8, 83), new THREE.MeshPhongMaterial({ color: 0xffffff }));
-  scene.rightStripe.position.set(-scene.table.geometry.width/2,0.01,0);
-  scene.add(scene.rightStripe);
-
-  scene.frontStripe = new THREE.Mesh( new THREE.CubeGeometry(scene.table.geometry.width, 1.8, 0.3), new THREE.MeshPhongMaterial({ color: 0xffffff }));
-  scene.frontStripe.position.set(0,0.01,scene.table.geometry.depth/2);
-  scene.add(scene.frontStripe);
-
-  scene.backStripe = new THREE.Mesh( new THREE.CubeGeometry(scene.table.geometry.width, 1.8, 0.3), new THREE.MeshPhongMaterial({ color: 0xffffff }));
-  scene.backStripe.position.set(0,0.01,-scene.table.geometry.depth/2);
-  scene.add(scene.backStripe);
 
 
   directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
@@ -109,7 +110,7 @@
   pongBall = new Physijs.SphereMesh(
     // function ( radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength ) {
     new THREE.SphereGeometry(1),
-    Physijs.createMaterial(new THREE.MeshPhongMaterial(0x0000ff), 0.0000001, 1.60),
+    Physijs.createMaterial(new THREE.MeshPhongMaterial(0x0000ff), 0.000001, 0.9),
     1
   );
   var collisionSound = document.getElementById('collision');
