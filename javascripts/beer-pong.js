@@ -20,11 +20,11 @@ booSound.addEventListener('ended', function() { booSound.load(); });
     var hand, mesh;
 
     document.getElementById('handsHud').innerHTML = frame.hands.length;
-    document.getElementById('streamingHud').innerHTML = LeapHandler.streaming;
+    document.getElementById('streamingHud').innerHTML = LeapHandler.streamingLocalFrames;
     document.getElementById('firebaseHud').innerHTML = Game.playerCount;
 
-    if (frame.valid && frame.local && !LeapHandler.streaming) {
-      LeapHandler.streaming = true;
+    if (frame.valid && frame.local && !LeapHandler.streamingLocalFrames) {
+      LeapHandler.streamingLocalFrames = true;
       LeapHandler.enableFrameSharing();
     }
 
@@ -43,8 +43,8 @@ setTimeout(function () {
   LeapHandler.updateSharedFramesLoop();
 }, 1000);
 
-controller.on('disconnect',         function(){ LeapHandler.streaming = false; LeapHandler.updateSharedFramesLoop(); });
-controller.on('deviceDisconnected', function(){ LeapHandler.streaming = false; LeapHandler.updateSharedFramesLoop(); });
+controller.on('disconnect',         function(){ LeapHandler.streamingLocalFrames = false; LeapHandler.updateSharedFramesLoop(); });
+controller.on('deviceDisconnected', function(){ LeapHandler.streamingLocalFrames = false; LeapHandler.updateSharedFramesLoop(); });
 
 LeapHandler.playback = controller.plugins.playback.player;
 Game.begin();

@@ -8,7 +8,7 @@
   window.LeapHandler = {};
 
   // streaming hasn't yet made it in to 0.6.0-beta1
-  LeapHandler.streaming = false;
+  LeapHandler.streamingLocalFrames = false;
   LeapHandler.frameSharingEnabled = false;
 
   var palmPositionHud = document.getElementById('palmPosition');
@@ -47,6 +47,8 @@
 
   // determines if a given set of local frame data is interesting and should be sent.
   LeapHandler.shouldSendFrame = function(localFrameData){
+    if (Game.playerCount.length < 2) return false;
+
     if (localFrameData.hands.length) return true;
 
     // send the fact that hands have disappeared
@@ -79,8 +81,9 @@
 
     for (i = 0; i < frameData.hands.length; i++) {
       hand = frameData.hands[i];
-      hand.id = hand.id + Game.userId;
       hand.userId = Game.userId;
+      hand.id = hand.id + Game.userId;
+      console.assert(typeof hand.id === 'string', "Invalid hand id: " + hand.id);
     }
 
     for (i = 0; i < frameData.pointables.length; i++) {
@@ -130,7 +133,7 @@
 
   // When the controller is not connected, this makes sure frame data gets used and emitted
   LeapHandler.updateSharedFramesLoop = function(){
-    if (this.streaming) return;
+    if (this.streamingLocalFrames) return;
     var userId, frameData, frame;
 
     // take the first frame as the "master" frame which others are added to
