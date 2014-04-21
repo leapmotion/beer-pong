@@ -31,6 +31,10 @@
     this.userFrames[userId] = data;
   }
 
+  LeapHandler.clearUser = function(userId){
+    delete this.userFrames[userId];
+  }
+
 
   LeapHandler.enableFrameSharing = function () {
     if (this.frameSharingEnabled) return;
@@ -41,23 +45,33 @@
     window.controller.connection.protocol = this.shareFrameDataProtocol;
   }
 
+  // determines if a given set of local frame data is interesting and should be sent.
+  LeapHandler.shouldSendFrame = function(localFrameData){
+    if (localFrameData.hands.length) return true;
+
+    // send the fact that hands have disappeared
+    if (Game.mostRecentlySentFrame && Game.mostRecentlySentFrame.hands.length) return true;
+
+    return false;
+  }
+
   // takes in a frame from the local machine
   LeapHandler.shareFrameDataProtocol = function(localFrameData){
     var eventOrFrame = LeapHandler.originalProtocol(localFrameData);
 
     if (eventOrFrame instanceof Leap.Frame) {
-      LeapHandler.makeIdsUniversal(localFrameData);
+      this.makeIdsUniversal(localFrameData);
 
-      if (localFrameData.id % 2 == 0 && localFrameData.hands.length){
+      if (localFrameData.id % 2 == 0 && this.shouldSendFrame(localFrameData)){
         Game.shareFrameData(localFrameData);
       }
 
       // this means creating double frames every time. eh.
-      eventOrFrame = LeapHandler.createSplicedFrame(localFrameData);
+      eventOrFrame = this.createSplicedFrame(localFrameData);
     }
 
     return eventOrFrame;
-  }
+  }.bind(LeapHandler);
 
   // converts hand and pointable integer IDs to UUIDs
   LeapHandler.makeIdsUniversal = function(frameData){
