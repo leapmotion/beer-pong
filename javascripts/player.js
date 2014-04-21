@@ -44,13 +44,17 @@
       if (cylinder.position.y < o.position.y && cylinder.position.distanceTo(o.position) < 4.65) {
         scene.remove(cylinder);
         pongBall.setLinearVelocity({x:0,y:0,z:0});
-        $('#player' + player.index + 'cups').append('<img src="images/cup.png">');
+        $('#player' + player.index + 'cups').append('<img src="images/cup.png?2">');
         if (cylinder.position.z > 0) {
+          player.score++;
           boo.play();
+          if (player.score >= player.cups.length) {
+            Game.overlay('You lose');
+          }
         } else {
           player.score++;
           if (player.score >= player.cups.length) {
-            Game.layover('You win');
+            Game.overlay('You win');
           }
           applaudeSound.play();
         }

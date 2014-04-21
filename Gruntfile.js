@@ -23,7 +23,15 @@ module.exports = function (grunt) {
         }
       },
       html: {
-        files: ['*.html', 'textures/*'],
+        files: ['*.html'],
+        tasks: [],
+        options: {
+          spawn: false,
+          livereload: true
+        }
+      },
+      images: {
+        files: ['images/*', 'textures/*'],
         tasks: [],
         options: {
           spawn: false,
