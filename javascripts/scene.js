@@ -8,7 +8,10 @@
     }
   );
   sceneCube = new THREE.Scene();
-  renderer = new THREE.WebGLRenderer({alpha: false});
+  renderer = new THREE.WebGLRenderer({alpha: true, antialias: true});
+
+  renderer.shadowMapEnabled = true;
+  renderer.shadowMapType = THREE.BasicShadowMap;
 
   renderer.setClearColor(0x111111, 0);
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -58,6 +61,8 @@
     }), 0.001, 0.99),
     0
   );
+  scene.table.receiveShadow = true;
+  scene.table.castShadow = true;
   var middleStripe = new THREE.Mesh( new THREE.CubeGeometry(0.3, 1.8, 83), new THREE.MeshPhongMaterial({ color: 0xffffff }));
   middleStripe.position.set(0,0.01,0);
   scene.table.add(middleStripe);
@@ -82,8 +87,18 @@
 
 
 
-  directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
+  directionalLight = new THREE.SpotLight(0xffffff, 0.7);
+  //directionalLight.shadowCameraVisible = true;
+  directionalLight.castShadow = true;
+  directionalLight.shadowMapWidth = 6048;
+  directionalLight.shadowMapHeight = 6048;
   directionalLight.position.set( 0, 800, 1 );
+  directionalLight.shadowCameraLeft = -300;
+  directionalLight.shadowCameraRight = 300;
+  directionalLight.shadowCameraTop = 300;
+  directionalLight.shadowCameraBottom = 300;
+  directionalLight.shadowCameraFar = 800;
+  directionalLight.shadowDarkness = 0.5;
   scene.add(directionalLight);
   // todo: play with shadows
   // ( color, intensity, distance )
@@ -122,7 +137,6 @@
 
   pongBall.position.set(0,30,0)
   pongBall.castShadow = true;
-  pongBall.receiveShadow = true;
   scene.add(pongBall);
 
 
@@ -138,21 +152,6 @@
 
   var textureCube = THREE.ImageUtils.loadTextureCube( urls );
   var material = new THREE.MeshBasicMaterial( { color: 0xffffff, envMap: textureCube } );
-
-  /* reflective ball
-  for ( var i = 0; i < 50; i ++ ) {
-
-      var mesh = new THREE.Mesh( geometry, material );
-
-      mesh.position.x = Math.random() * 10000 - 5000;
-      mesh.position.y = Math.random() * 10000 - 5000;
-      mesh.position.z = Math.random() * 10000 - 5000;
-
-      mesh.scale.x = mesh.scale.y = mesh.scale.z = Math.random() * 3 + 1;
-
-      scene.add( mesh );
-  }
-  */
 
   // Skybox
 
