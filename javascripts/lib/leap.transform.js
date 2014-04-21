@@ -68,9 +68,23 @@
       }
       return _results;
     };
+
+    // stores a map of handID -> fromFrameID
+    // if the ID hasn't changed, don't re-transform
+    var handData = {};
+
     return {
       hand: function(hand) {
         var finger, matrix, _i, _len, _ref, _results;
+
+        if (hand.fromFrameId){ //fromFrameId is only available on remote frames
+          if (handData[hand.id] == hand.fromFrameId){
+            return;
+          }else{
+            handData[hand.id] = hand.fromFrameId
+          }
+        }
+
         matrix = scope.getMatrix(hand);
         transformPositions(matrix, hand.palmPosition, hand.stabilizedPalmPosition, hand.sphereCenter);
         transformDirections(matrix, hand.direction, hand.palmNormal, hand.palmVelocity);

@@ -27,8 +27,8 @@
   this.playback = undefined;
 
 
-  LeapHandler.addUserFrame = function(userId, data){
-    this.userFrames[userId] = data;
+  LeapHandler.addUserFrame = function(userId, frameData){
+    this.userFrames[userId] = frameData;
   }
 
   LeapHandler.clearUser = function(userId){
@@ -74,7 +74,7 @@
     if (eventOrFrame instanceof Leap.Frame) {
       this.makeIdsUniversal(localFrameData);
 
-      if (localFrameData.id % 2 == 0 && this.shouldSendFrame(localFrameData)){
+      if ((localFrameData.id % 2) == 0 && this.shouldSendFrame(localFrameData)){
         Game.shareFrameData(localFrameData);
       }
 
@@ -123,6 +123,7 @@
     for (var i = 0; i < frameData.hands.length; i++){
       // assuming ordering is the same :-/
       frame.hands[i].userId = frameData.hands[i].userId;
+      frame.hands[i].fromFrameId = frameData.hands[i].fromFrameId;
     }
     return frame;
   }
@@ -132,18 +133,19 @@
   LeapHandler.spliceInSharedFrames = function(frameData){
     var i, hand, pointable, userFrame, userId; // no pointable support for now
 
+
     for (userId in this.userFrames){
       userFrame = this.userFrames[userId];
 
       if (userFrame.hands){ // not sure why
         for (i = 0; i < userFrame.hands.length; i++){
           frameData.hands.push(userFrame.hands[i]);
+          userFrame.hands[i].fromFrameId = userFrame.id;
         }
         for (i = 0; i < userFrame.pointables.length; i++){
           frameData.pointables.push(userFrame.pointables[i]);
         }
       }
-
     }
   }
 
@@ -212,7 +214,6 @@
       pongBall.inHand = false;
 
       if (frame.ballPosition && Game.slavePhysics()){
-        console.log('s');
         pongBall.position.fromArray(frame.ballPosition)
       }else{
         pongBall.mass = 1;
