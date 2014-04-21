@@ -113,7 +113,27 @@
     this.framesRef = this.currentUserRef.child('frames');
     this.framesRef.onDisconnect().remove();
 
+    this.watchRoles();
     this.setRole();
+  }
+
+  Game.watchRoles = function(){
+    this.rolesRef.on('value', function(snapshot){
+      var val = snapshot.val();
+      this.player1.userId = val.player1;
+      this.player2.userId = val.player2;
+
+
+      // it would be neater to end the game here :-P
+      if (this.player1.userId == this.userId) {
+        Game.takeRole('player1');
+      }else if (this.player2.userId == this.userId){
+        Game.takeRole('player2');
+      }else{
+        console.log("Assigned role of observer")
+        // Game.takeRole('observer');
+      }
+    }.bind(this));
   }
 
   Game.setRole = function(){
@@ -130,22 +150,6 @@
         roles.player2 = this.userId;
       }
       return roles;
-    }.bind(this),
-    function(error, committed, snapshot){
-      if (!committed) return;
-      var val = snapshot.val();
-      this.player1.userId = val.player1;
-      this.player2.userId = val.player2;
-
-      // it would be neater to end the game here :-P
-      if (this.player1.userId == this.userId) {
-        Game.takeRole('player1');
-      }else if (this.player2.userId == this.userId){
-        Game.takeRole('player2');
-      }else{
-        console.log("Assigned role of observer")
-//        Game.takeRole('observer');
-      }
     }.bind(this));
   }
 

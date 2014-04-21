@@ -23,7 +23,9 @@
       } else if (scope.position || scope.quaternion || scope.scale) {
         _matrix.set.apply(_matrix, noop);
         if (scope.quaternion) {
-          _matrix.makeRotationFromQuaternion(typeof scope.quaternion === 'function' ? scope.quaternion(hand) : scope.quaternion);
+          var quaternion = typeof scope.quaternion === 'function' ? scope.quaternion(hand) : scope.quaternion;
+          console.assert(quaternion instanceof THREE.Quaternion);
+          _matrix.makeRotationFromQuaternion(quaternion);
         }
         if (scope.scale) {
           _matrix.scale(typeof scope.scale === 'function' ? scope.scale(hand) : scope.scale);
