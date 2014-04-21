@@ -150,26 +150,36 @@
     pongBall.setLinearVelocity({x:0,y:0,z:0});
     pongBall.__dirtyPosition = true;
   };
+  pongBall.release = function(){
+    this.inHand = false;
+    this.mass = 1;
+  }
+  pongBall.grab = function(){
+    this.bouncesSinceTurnStart = 0;
+    this.inHand = true;
+    pongBall.mass = 0;
+  }
   pongBall.bouncesSinceTurnStart = 0;
   pongBall.addBounceSinceTurnStart = function() {
     this.bouncesSinceTurnStart++;
     if (this.bouncesSinceTurnStart > 1) {
       pongBall.reset();
-      if (Game.turn === Game.player1) {
-        Game.setTurn(Game.player2);
-      } else if (Game.turn === Game.player2) {
-        Game.setTurn(Game.player1);
-      }
+      Game.toggleTurn();
     }
     $('#turnBounces').html(this.bouncesSinceTurnStart);
   };
   pongBall.setDamping(0.9,0.9);
   var collisionSound = document.getElementById('collision');
   scene.table.addEventListener('collision', function() {
+    // we should have a global Throw object. oh well.
     pongBall.addBounceSinceTurnStart();
     collisionSound.play();
   });
   collisionSound.addEventListener('ended', function() { collisionSound.load(); });
+
+  pongBall.inFlight = function(){
+    return this.getLinearVelocity.x > 0.001 && this.getLinearVelocity.y > 0.001 && this.getLinearVelocity.z > 0.001
+  }
 
 
   pongBall.castShadow = true;
@@ -186,7 +196,6 @@
   ];
 
   var textureCube = THREE.ImageUtils.loadTextureCube( urls );
-  var material = new THREE.MeshBasicMaterial( { color: 0xffffff, envMap: textureCube } );
 
   // Skybox
 
@@ -232,6 +241,8 @@
     if (pongBall.position.y < lostHeight && !pongBall.belowTable && !pongBall.inHand) {
       booSound.play();
       pongBall.belowTable = true;
+
+      Game.toggleTurn();
     } else if (pongBall.position.y >= lostHeight && pongBall.belowTable) {
       pongBall.belowTable = false;
     }

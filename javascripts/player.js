@@ -52,6 +52,7 @@
         if (cylinderIndex > -1) {
           player.cups.splice(cylinderIndex, 1);
         }
+
         scene.remove(cylinder);
         pongBall.setLinearVelocity({x:0,y:0,z:0});
         $('#player' + player.index + 'cups').append('<img src="images/cup.png">');

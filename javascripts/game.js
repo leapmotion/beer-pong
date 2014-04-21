@@ -69,19 +69,32 @@
     console.time('firebase-connection');
     if (this.id()) {
       this.gameRef = this.gamesRef.child(this.id());
+
       this.gameRef.once('value', function (snapshot) {
+
+        if (snapshot.val() == null) {
+          // invalid id
+          this.createLiveGame();
+          return
+        }
+
         console.log('Connected to game ' + this.gameRef.name() + ', created:  ' + new Date(snapshot.val().created_at))
+        this.overlay('Pinch to control the ball.');
         this.joinGame();
-        Game.reset();
+        this.reset();
       }.bind(this));
     } else {
-      // push appears to be synchronous. IDs are generated locally.
-      this.gameRef = this.gamesRef.push({created_at: (new Date()).getTime()});
-      console.log('Created game', this.gameRef.name());
-      window.location.hash = '#' + this.gameRef.name();
-
-      this.joinGame();
+      this.createLiveGame();
     }
+  }
+
+  Game.createLiveGame = function(){
+    this.gameRef = this.gamesRef.push({created_at: (new Date()).getTime()});
+    console.log('Created game', this.gameRef.name());
+    Game.overlay('Share this URL to your date!');
+    window.location.hash = '#' + this.gameRef.name();
+
+    this.joinGame();
   }
 
   Game.joinGame = function () {
@@ -90,13 +103,20 @@
     this.playersRef = this.gameRef.child('players');
     // roles is a dictionary of role: userID.
     this.rolesRef = this.gameRef.child('roles');
+    this.currentTurnRef = this.gameRef.child('currentTurnRef');
+    this.currentTurnRef.on('value', function(snapshot){
+      // returns the user id of the current user
+      if (snapshot.val() && Game.getPlayerById(snapshot.val())){
+        console.log('syncing player turn to ', snapshot.val());
+        Game.setTurn(Game.getPlayerById(snapshot.val()));
+      }
+    });
 
-    // todo: hook this shit up with a player and a side
     var myName = playerNames[Math.floor(Math.random() * playerNames.length)].replace(/\s/g, '');
 
     this.currentUserRef = this.playersRef.push({
       name: myName,
-      state: 'joining' // will be turned in to "playing" later.
+      state: 'joining'
     });
 
     this.userId = this.currentUserRef.name();
@@ -220,9 +240,12 @@
         localTime: (new Date).getTime(),
         id: frame.id,
         currentFrameRate: frame.currentFrameRate,
-        ballPosition: pongBall.position.toArray()
       }
     }
+
+//    if (Game.isMyTurn()){
+//      frameData.frame.ballPosition = pongBall.position.toArray();
+//    }
 
     this.recentSentFrameRefs.push(this.framesRef.push(frameData));
 
@@ -242,10 +265,10 @@
 
     var timeDifference = ((new Date).getTime() - frameData.localTime);
 
-    if (timeDifference > 10000) {
-      console.warn("dropping frame, " + timeDifference + "ms old");
-      return
-    }
+//    if (timeDifference > 10000) {
+//      console.warn("dropping frame, " + timeDifference + "ms old");
+//      return
+//    }
 
     latencyHud.innerHTML = timeDifference + "ms";
 
@@ -261,12 +284,6 @@
     LeapHandler.addUserFrame(userId, frameData);
   }.bind(this);
 
-  // Copy physics from master user unless single player or player 1
-  Game.slavePhysics = function(){
-    if (!this.player2.userId) return false;
-    if (this.userId != this.player1.userId) return true;
-    return false;
-  }
 
   Game.begin = function () {
     this.connectToLiveGame();
@@ -275,10 +292,30 @@
   };
 
   Game.setTurn = function(player) {
+    if (this.turn == player) return;
+    console.log(player.side + ' turn');
     this.turn = player;
     $('.turn').html('');
     $('#player' + player.index + ' .turn').html("'s turn ");
   };
+
+  Game.toggleTurn = function(){
+    if (Game.player1 && Game.player2){
+      if (Game.turn === Game.player1) {
+        Game.setTurn(Game.player2);
+      } else if (Game.turn === Game.player2) {
+        Game.setTurn(Game.player1);
+      }
+    }else{
+      Game.setTurn(Game.player1);
+    }
+    pongBall.reset();
+  }
+
+  Game.isMyTurn = function(){
+    return Game.turn.userId == Game.userId;
+  }
+
   Game.reset = function() {
     this.player1.resetCups();
     this.player2.resetCups();

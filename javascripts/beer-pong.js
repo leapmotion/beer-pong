@@ -16,10 +16,7 @@ booSound.addEventListener('ended', function() { booSound.load(); });
       // these numbers are hardcoded in raw leap-space, not sure how to convert easily yet
       var player = Game.getPlayerById(hand.userId);
       return (player && player.options.handOffset)    || Game.player1.options.handOffset;
-    }//,
-//    scale: function(hand){
-//      return new THREE.Vector3(2,2,2);
-//    }
+    }
   })
   .use('riggedHand', {
     parent: window.scene,
@@ -31,7 +28,7 @@ booSound.addEventListener('ended', function() { booSound.load(); });
   .use('playback')
   .on('frame', function(frame){
 
-    var hand, mesh;
+    var leapHand, handMesh;
 
     document.getElementById('handsHud').innerHTML     = frame.hands.length;
     document.getElementById('streamingHud').innerHTML = LeapHandler.streamingLocalFrames;
@@ -44,11 +41,27 @@ booSound.addEventListener('ended', function() { booSound.load(); });
 
     if (!frame.hands[0]) return;
 
-    hand = frame.hands[0];
-    mesh = hand.data('riggedHand.mesh');
+    leapHand = frame.hands[0];
+    handMesh = leapHand.data('riggedHand.mesh');
 
-    LeapHandler.trackThrow(hand, mesh, frame);
-    LeapHandler.updateHud(hand, mesh);
+
+    leapHand.velocity = leapHand.accumulate('palmVelocity', 10, function (historyTotal) {
+      var current = [0,0,0];
+      historyTotal.push(leapHand.palmVelocity);
+      for (var i = 0; i<historyTotal.length; i++) {
+        current[0] += historyTotal[i][0] * 0.02;
+        current[1] += historyTotal[i][1] * 0.02;
+        current[2] += historyTotal[i][2] * 0.02;
+      }
+      return current;
+    });
+
+//    if (Game.isMyTurn()) {
+      LeapHandler.trackThrow(leapHand, handMesh);
+//    }else{
+//      LeapHandler.followPhysics(frame);
+//    }
+    LeapHandler.updateHud(leapHand, handMesh);
 
   });
 

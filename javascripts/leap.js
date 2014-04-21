@@ -193,44 +193,33 @@
   }
 
 
-  LeapHandler.trackThrow = function(leapHand, handMesh, frame){
+  LeapHandler.followPhysics = function(frame){
+    if (frame.ballPosition){
+      pongBall.position.fromArray(frame.ballPosition)
+      pongBall.__dirtyPosition = true;
+      pongBall.mass = 0;
+    }
+  }
 
-    leapHand.velocity = leapHand.accumulate('palmVelocity', 10, function (historyTotal) {
-      var current = [0,0,0];
-      historyTotal.push(leapHand.palmVelocity);
-      for (var i = 0; i<historyTotal.length; i++) {
-        current[0] += historyTotal[i][0] * 0.02;
-        current[1] += historyTotal[i][1] * 0.02;
-        current[2] += historyTotal[i][2] * 0.02;
-      }
-      return current;
-    });
-
-
+  LeapHandler.trackThrow = function(leapHand, handMesh){
     if (leapHand.pinchStrength > 0.5) {
-      if (!pongBall.inHand) {
-        pongBall.bouncesSinceTurnStart = 0;
-      }
+      if (!pongBall.inHand) pongBall.grab();
+
       var finger1 = leapHand.indexFinger.tipPosition;
       var finger2 = leapHand.thumb.tipPosition;
       // may need to use constraints for this
-      pongBall.inHand = true;
+
       handMesh.scenePosition([(finger1[0]+finger2[0])/2, (finger1[1]+finger2[1])/2, (finger1[2]+finger2[2])/2], pongBall.position);
       pongBall.__dirtyPosition = true;
-      pongBall.mass = 0;
       pongBall.setLinearVelocity({x: leapHand.velocity[0], y: leapHand.velocity[1], z: leapHand.velocity[2]});
-    } else {
-      pongBall.inHand = false;
 
-      if (frame.ballPosition && Game.slavePhysics()){
-        pongBall.position.fromArray(frame.ballPosition)
-        pongBall.__dirtyPosition = true;
-      }else{
-        pongBall.mass = 1;
-      }
-
+    }else{
+      if (pongBall.inHand) pongBall.release();
+//      if (!pongBall.inFlight()){
+//        console.log('ball is stationary, aborting turn');
+//        Game.toggleTurn();
+//      }
     }
-
   }
 
 }).call(this);
