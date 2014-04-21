@@ -38,10 +38,10 @@
   Game.playerCount = 1;
   Game.streamFrames = false;
 
-  // we track the most recently sent frames, and delete any if the list gets larger than 10.
-  Game.recentSentFrames = [];
-
   Game.gamesRef = window.firebase.child('games');
+
+  Game.recentSentFrameRefs = [];
+  Game.mostRecentlySenfFrame = undefined;
 
   // firebase structure:
   // /game/<id>/players/<id>/frames
@@ -154,11 +154,12 @@
       }
     }
 
-    this.recentSentFrames.push(this.framesRef.push(frameData));
+    this.recentSentFrameRefs.push(this.framesRef.push(frameData));
+    this.mostRecentlySenfFrame = frameData;
 
     // remove old frames from firebase
-    if (this.recentSentFrames.length > 10){
-      this.recentSentFrames.shift().remove();
+    if (this.recentSentFrameRefs.length > 10){
+      this.recentSentFrameRefs.shift().remove();
     }
     this.framesSent++;
   }
