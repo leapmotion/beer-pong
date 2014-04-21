@@ -71,17 +71,17 @@ div {
     width: 300px; }
     div#main-menu img {
       width: 300px; }
-    div#main-menu .new-game {
-      margin-top: 50px; }
-      div#main-menu .new-game .nonhover {
-        display: block; }
-      div#main-menu .new-game .hover {
-        cursor: pointer;
-        display: none; }
-      div#main-menu .new-game:hover .nonhover {
-        display: none; }
-      div#main-menu .new-game:hover .hover {
-        display: block; }
+      div#main-menu img.logo {
+        margin-bottom: 30px; }
+    div#main-menu .button .nonhover {
+      display: block; }
+    div#main-menu .button .hover {
+      cursor: pointer;
+      display: none; }
+    div#main-menu .button:hover .nonhover {
+      display: none; }
+    div#main-menu .button:hover .hover {
+      display: block; }
   div img {
     width: 30px; }
 
