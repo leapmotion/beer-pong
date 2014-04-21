@@ -2,6 +2,14 @@ module.exports = function (grunt) {
   var filename = "leap.playback-<%= pkg.version %>";
   grunt.initConfig({
     pkg: grunt.file.readJSON("package.json"),
+    connect: {
+      server: {
+       options: {
+         base: '',
+         keepalive: false
+       }
+      }
+    },
     watch: {
       options: {
         livereload: true
@@ -54,5 +62,8 @@ module.exports = function (grunt) {
     }
   });
   require('load-grunt-tasks')(grunt);
+  grunt.loadNpmTasks('grunt-devtools')
+  grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.registerTask('dev', ['connect', 'watch'])
   return grunt.registerTask('default', ['sass']);
 };
