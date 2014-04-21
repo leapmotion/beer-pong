@@ -350,6 +350,7 @@ var _sortBy = function (obj, iterator, context) {
       var JSON, handMesh, palm, rigFinger, _i, _len, _ref;
       JSON = scope.lowPoly ? lowPolyRigs[leapHand.type] : rigs[leapHand.type];
       handMesh = createMesh(JSON);
+      handMesh.castShadow = true;
       scope.parent.add(handMesh);
       leapHand.data('riggedHand.mesh', handMesh);
       palm = handMesh.children[0];

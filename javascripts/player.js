@@ -63,8 +63,8 @@
     cupTop.position.set(0,3.2,0);
     cupBeer.position.set(0,3.1,0)
     bottom.position.set(0,-3,0);
-    bottom.castShadow = cylinder.castShadow = true;
-    bottom.castShadow = cylinder.receiveShadow = true;
+//   bottom.castShadow = cylinder.castShadow = true;
+   bottom.receiveShadow = cylinder.receiveShadow = true;
     cylinder.add(cupBeer);
     cylinder.add(bottom);
     cylinder.add(cupTop);
