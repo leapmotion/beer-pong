@@ -1,6 +1,6 @@
 (function(){
   scene = new Physijs.Scene();
-  scene.setGravity(0, -1, 0);
+  scene.setGravity({x: 0, y: -50, z: 0});
   scene.addEventListener(
     'update',
     function() {
