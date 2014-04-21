@@ -73,36 +73,44 @@
     // todo: hook this shit up with a player and a side
     var myName = playerNames[Math.floor(Math.random() * playerNames.length)].replace(/\s/g, '');
 
-    this.playerRef = this.playersRef.push({
+    this.currentUserRef = this.playersRef.push({
       name: myName,
       state: 'joining' // will be turned in to "playing" later.
     });
 
-    this.userId = this.playerRef.name();
+    this.userId = this.currentUserRef.name();
 
     console.log('Joining as', myName, '(' + this.userId + ')');
 
     this.playersRef.on('child_added', this.playerJoined);
 
     // do cleanup here?
-    this.playerRef.child('state').onDisconnect().set('disconnected');
+    this.currentUserRef.child('state').onDisconnect().set('disconnected');
 
-    this.framesRef = this.playerRef.child('frames');
+    // this is pretty insecure.  One player should not be able to delete another..
+    this.currentUserRef.child('frames').onDisconnect().remove();
+
+    this.framesRef = this.currentUserRef.child('frames');
     console.log('ready to send frames!');
   }
 
   Game.playerJoined = function(snapshot){
-    if (snapshot.val().state == 'disconnected') {
-      // this is pretty ensecure.  One player should not be able to delete another..
-      snapshot.ref().remove();
-      return
-    }
+    if (snapshot.val().state == 'disconnected') return;
 
-    if (snapshot.name() == this.playerRef.name()) {
-//      $('#player2name').html(this.playerRef.val().name); // where's the player name??
+    // watch for disconnection:
+    snapshot.ref().child('state').on('value', function(stateSnapshot){
+      if (stateSnapshot.val() == 'disconnected') {
+        stateSnapshot.ref().parent().once('value', function(playerSnapshot){
+          Game.playerLeft(playerSnapshot);
+        });
+      }
+    });
+
+    if (snapshot.name() == this.currentUserRef.name()) {
+//      $('#player2name').html(this.currentUserRef.val().name); // where's the player name??
       this.streamFrames = true;
     }else{
-//      $('#player1name').html(this.playerRef.val().name); // where's the player name??
+//      $('#player1name').html(this.currentUserRef.val().name); // where's the player name??
       this.watchPlayer(snapshot);
     }
   }.bind(Game);
@@ -119,6 +127,13 @@
     // are frames actually removed here?
     this.playersRef.child(snapshot.name() + '/frames').limit(10).on('child_added', Game.receiveFrame);
   }
+
+  Game.playerLeft = function(snapshot){
+    console.log('Player ' + snapshot.val().name + ' has left the game');
+    Game.playerCount--;
+
+    this.playersRef.child(snapshot.name() + '/frames').off('child_added', Game.receiveFrame);
+  }.bind(Game);
 
 
   Game.shareFrameData = function (frame) {
