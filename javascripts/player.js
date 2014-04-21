@@ -5,11 +5,10 @@
   applaudeSound.addEventListener('ended', function() { applaudeSound.load(); });
 
   window.Player = function (options) {
+    this.options = options;
     this.index = options.index;
     this.side = options.side; // 1 or -1
     this.score = 0;
-    this.handOffset = options.handOffset;
-    this.handQuaternion = options.handQuaternion;
 
     if (this.side == 'far'){
       this.rotation = new THREE.Vector3(-1, 1, -1)
@@ -29,6 +28,11 @@
   window.Player.prototype.placementNoise = function () {
     return 0;
 //    return this.drunkeness * (Math.random() - 0);
+  }
+
+  Player.prototype.setCamera = function(){
+    window.camera.position = this.options.cameraPosition;
+    window.camera.lookAt(new THREE.Vector3(0, 0, 0));
   }
 
 

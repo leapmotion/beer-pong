@@ -38,7 +38,8 @@
 
 
   camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 1000);
-  camera.position.fromArray([0, 26, 60]);
+  camera.defaultPosition = [0, 26, 60];
+  camera.position.fromArray(camera.defaultPosition);
   camera.lookAt(new THREE.Vector3(0, 0, 0));
   cameraCube = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 100000 );
 
@@ -138,7 +139,7 @@
 
   pongBall = new Physijs.SphereMesh(
     // function ( radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength ) {
-    new THREE.SphereGeometry(1),
+    new THREE.SphereGeometry(1.4, 32, 32),
     Physijs.createMaterial(new THREE.MeshPhongMaterial(0x0000ff), 1, 0.8),
     1
   );

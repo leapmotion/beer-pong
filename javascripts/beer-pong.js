@@ -7,15 +7,15 @@ booSound.addEventListener('ended', function() { booSound.load(); });
 
 (window.controller = new Leap.Controller)
   .use('transform', {
-    //
-//    quaternion: function(hand){
-//      var player = Game.getPlayerById(hand.userId);
-//      return player && player.handQuaternion;
-//    },
-//    offset: function(hand){
-//      var player = Game.getPlayerById(hand.userId);
-//      return player && player.handOffset;
-//    },
+    quaternion: function(hand){
+      var player = Game.getPlayerById(hand.userId);
+      return player && player.options.handQuaternion;
+    },
+    position: function(hand){
+      // these numbers are hardcoded in raw leap-space, not sure how to convert easily yet
+      var player = Game.getPlayerById(hand.userId);
+      return player && player.options.handOffset;
+    }//,
 //    scale: function(hand){
 //      return new THREE.Vector3(2,2,2);
 //    }
@@ -23,7 +23,7 @@ booSound.addEventListener('ended', function() { booSound.load(); });
   .use('riggedHand', {
     parent: window.scene,
     positionScale: 2.5,
-    offset: new THREE.Vector3(0, 3, 10)
+    scale: 1.5
   })
   .use('accumulate')
   .connect()
@@ -61,3 +61,12 @@ controller.on('deviceDisconnected', function(){ LeapHandler.streamingLocalFrames
 
 LeapHandler.playback = controller.plugins.playback.player;
 Game.begin();
+
+
+// http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+function getParam(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}

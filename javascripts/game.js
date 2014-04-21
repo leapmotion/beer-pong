@@ -21,18 +21,24 @@
   Game.whiteMaterial = new THREE.MeshPhongMaterial({color: 0xffffff});
   Game.beerMaterial = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture('beer.jpg')});
 
+
   Game.player1 = new Player({
     side: 'near',
     index: 1,
-    handOffset: (new THREE.Vector3(0, -3, 10)),
-    handQuaternion: new THREE.Quaternion
+    handOffset: (new THREE.Vector3(0, 0, 200)),
+    handQuaternion: new THREE.Quaternion,
+    cameraPosition: (new THREE.Vector3).fromArray(camera.defaultPosition)
   });
+
+  p2camPos = (new THREE.Vector3).fromArray(camera.defaultPosition);
+  p2camPos.z = p2camPos.z * -1;
 
   Game.player2 = new Player({
     side: 'far',
     index: 2,
-    handOffset: (new THREE.Vector3(-0, -3, -100)),
-    handQuaternion: (new THREE.Quaternion).setFromEuler(new THREE.Euler(0, Math.PI, 0))
+    handOffset: (new THREE.Vector3(0, 0, -200)),
+    handQuaternion: (new THREE.Quaternion).setFromEuler(new THREE.Euler(0, Math.PI, 0)),
+    cameraPosition: p2camPos
   });
 
   Game.getPlayerById = function(userId){
@@ -113,10 +119,14 @@
   Game.setRole = function(){
     this.rolesRef.transaction(function(roles){
       roles || (roles = {});
-      if (!roles.player1){
+
+      // allow role override
+      var role = getParam('role');
+      if (role == 'player2'){
+        roles.player2 = this.userId
+      }else if (!roles.player1){
         roles.player1 = this.userId;
-      }
-      else if (!roles.player2){
+      }else if (!roles.player2){
         roles.player2 = this.userId;
       }
       return roles;
@@ -128,19 +138,25 @@
       this.player2.userId = val.player2;
 
       // it would be neater to end the game here :-P
-      if (this.player1.userId == this.userId){
-        console.log("Assigned as player1");
-        this.currentUser = this.player1;
-        this.rolesRef.child('player1').onDisconnect().remove();
-      }
-      else if (this.player2.userId == this.userId){
-        console.log("Assigned as player2");
-        this.currentUser = this.player2;
-        this.rolesRef.child('player2').onDisconnect().remove();
+      if (this.player1.userId == this.userId) {
+        Game.takeRole('player1');
+      }else if (this.player2.userId == this.userId){
+        Game.takeRole('player2');
       }else{
         console.log("Assigned role of observer")
+//        Game.takeRole('observer');
       }
     }.bind(this));
+  }
+
+  Game.takeRole = function(roleName){
+    console.log("Assigned as " + roleName);
+
+    // allow another player to take this spot:
+    this.rolesRef.child(roleName).onDisconnect().remove();
+
+    var role = Game[roleName];
+    role.setCamera();
   }
 
 
