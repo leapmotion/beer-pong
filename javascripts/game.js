@@ -56,7 +56,7 @@
       this.gameRef.once('value', function (snapshot) {
         console.log('Connected to game ' + this.gameRef.name() + ', created:  ' + new Date(snapshot.val().created_at))
 
-        this.setupPlayers();
+        this.joinGame();
       }.bind(this));
     } else {
       // push appears to be synchronous. IDs are generated locally.
@@ -64,14 +64,16 @@
       console.log('Created game', this.gameRef.name());
       window.location.hash = '#' + this.gameRef.name();
 
-      this.setupPlayers();
+      this.joinGame();
     }
   }
 
-  Game.setupPlayers = function () {
+  Game.joinGame = function () {
     console.timeEnd('firebase-connection');
     // todo: hook name to session ID
-    this.playersRef = this.gameRef.child('players'); // will this be created automatically?
+    this.playersRef = this.gameRef.child('players');
+    // roles is a dictionary of role: userID.
+    this.rolesRef = this.gameRef.child('roles');
 
     // todo: hook this shit up with a player and a side
     var myName = playerNames[Math.floor(Math.random() * playerNames.length)].replace(/\s/g, '');
@@ -87,15 +89,46 @@
 
     this.playersRef.on('child_added', this.playerJoined);
 
-    // do cleanup here?
     this.currentUserRef.child('state').onDisconnect().set('disconnected');
 
     // this is pretty insecure.  One player should not be able to delete another..
-    this.currentUserRef.child('frames').onDisconnect().remove();
-
     this.framesRef = this.currentUserRef.child('frames');
-    console.log('ready to send frames!');
+    this.framesRef.onDisconnect().remove();
+
+    this.setRole();
   }
+
+  Game.setRole = function(){
+    this.rolesRef.transaction(function(roles){
+      roles || (roles = {});
+      if (!roles.player1){
+        roles.player1 = this.userId;
+      }
+      else if (!roles.player2){
+        roles.player2 = this.userId;
+      }
+      return roles;
+    }.bind(this),
+    function(error, committed, snapshot){
+      if (!committed) return;
+      var val = snapshot.val();
+      this.player1.userId = val.player1;
+      this.player2.userId = val.player2;
+
+      // it would be neater to end the game here :-P
+      if (this.player1.userId == this.userId){
+        console.log("Assigned as player1");
+        this.rolesRef.child('player1').onDisconnect().remove();
+      }
+      else if (this.player2.userId == this.userId){
+        console.log("Assigned as player2");
+        this.rolesRef.child('player2').onDisconnect().remove();
+      }else{
+        console.log("Assigned role of observer")
+      }
+    }.bind(this));
+  }
+
 
   Game.playerJoined = function(snapshot){
     if (snapshot.val().state == 'disconnected') return;
