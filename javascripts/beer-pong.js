@@ -62,9 +62,12 @@ controller.on('deviceDisconnected', function(){ LeapHandler.streamingLocalFrames
 
 LeapHandler.playback = controller.plugins.playback.player;
 
-$('#begin-game').click(function() {
+$('#new-game').click(function() {
+  $('#main-menu').hide();
+  $('#players').show();
   Game.reset();
 });
+$('#players').hide();
 Game.begin();
 
 
