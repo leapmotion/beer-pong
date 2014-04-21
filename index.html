@@ -7,20 +7,20 @@
     <script src="javascripts/lib/headtrackr.js"></script>
   </head>
   <body>
-    <canvas id="inputCanvas" width="320" height="240" style="display:none"></canvas>
-    <video id="inputVideo" autoplay loop></video>
-
-    <div class="container">
+    <div class="container" id="begin-game">
+        New Game
+    </div>
+    <div class="container" id="players">
       <div class="row">
-        <div class="col-md-3">
-          <h2 id="player2name">Player 1</h2>
-          <div id="player2cups"> </div>
+        <div class="col-md-4" id="player1">
+          <h2><span class="name">Player 1</span><span class="turn">&nbsp;</span></h2>
+          <div class="cups"> </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
         </div>
-        <div class="col-md-3">
-          <h2 id="player1name">Player 2</h2>
-          <div id="player1cups"> </div>
+        <div class="col-md-4" id="player2">
+          <h2><span class="name">Player 2</span><span class="turn">&nbsp;</span></h2>
+          <div class="cups"> </div>
         </div>
       </div>
     </div>
@@ -79,6 +79,7 @@
     <audio id="applaude" preload="auto"><source src="audio/applaude.ogg" /></audio>
 
     <!--<script type='text/javascript' src='https://cdn.firebase.com/js/client/1.0.11/firebase.js'></script>-->
+    <script type='text/javascript' src='jquery.phono.min.js'></script>
     <script type='text/javascript' src='https://cdn.firebase.com/js/simple-login/1.3.2/firebase-simple-login.js'></script>
     <script type='text/javascript' src='javascripts/lib/firebase-debug.js'></script>
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>

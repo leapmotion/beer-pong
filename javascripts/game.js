@@ -71,8 +71,9 @@
       this.gameRef = this.gamesRef.child(this.id());
       this.gameRef.once('value', function (snapshot) {
         console.log('Connected to game ' + this.gameRef.name() + ', created:  ' + new Date(snapshot.val().created_at))
-        Game.overlay('Welcome to the game! Pinch to control the ball.');
+        Game.overlay('Pinch to control the ball.');
         this.joinGame();
+        Game.reset();
       }.bind(this));
     } else {
       // push appears to be synchronous. IDs are generated locally.
@@ -177,10 +178,10 @@
     });
 
     if (snapshot.name() == this.currentUserRef.name()) {
-      $('#player2name').html(snapshot.val().name); // where's the player name??
+      $('#player1 .name').html(snapshot.val().name); // where's the player name??
       this.streamFrames = true;
     }else{
-      $('#player1name').html(snapshot.val().name);
+      $('#player2 .name').html(snapshot.val().name);
       this.watchPlayer(snapshot);
     }
   }.bind(Game);
@@ -265,22 +266,34 @@
 
   Game.begin = function () {
     this.connectToLiveGame();
+    Game.reset();
+    window.render();
+  };
 
-    // connect or create game by id
-
+  Game.setTurn = function(player) {
+    this.turn = player;
+    $('.turn').html('');
+    $('#player' + player.index + ' .turn').html("'s turn ");
+  };
+  Game.reset = function() {
     this.player1.resetCups();
     this.player2.resetCups();
-
-    window.render();
+    pongBall.reset();
+    this.setTurn(this.player1);
   };
 
 
   // what does this method do?
-  Game.overlay = function (text) {
+  Game.overlay = function (text, func) {
     var $overlay = $('<div class="overlay"></div>');
     $overlay.appendTo($('body')).html(text)
-      .fadeIn('fast').animate({ 'opacity': 0, 'zoom': '2' }, {duration: 3000, queue: false}, function (e) {
-        e.target.remove();
+      .fadeIn('fast').animate({}, {duration: 6000})
+      .animate({ 'opacity': 0 }, {
+        duration: 1000,
+        complete: function (e) {
+          $overlay.remove();
+          func && func();
+        }
       });
   }
 }).call(this);

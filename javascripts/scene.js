@@ -143,15 +143,33 @@
     Physijs.createMaterial(new THREE.MeshPhongMaterial(0x0000ff), 1, 0.8),
     1
   );
+  pongBall.reset = function() {
+    pongBall.position.set(0,20,0);
+    pongBall.mass = 0;
+    pongBall.setLinearVelocity({x:0,y:0,z:0});
+    pongBall.__dirtyPosition = true;
+  };
+  pongBall.bouncesSinceTurnStart = 0;
+  pongBall.addBounceSinceTurnStart = function() {
+    this.bouncesSinceTurnStart++;
+    if (this.bouncesSinceTurnStart/2 > 1) {
+      pongBall.reset();
+      if (Game.turn === Game.player1) {
+        Game.setTurn(Game.player2);
+      } else if (Game.turn === Game.player2) {
+        Game.setTurn(Game.player1);
+      }
+    }
+  };
   pongBall.setDamping(0.9,0.9);
   var collisionSound = document.getElementById('collision');
   scene.table.addEventListener('collision', function() {
+    pongBall.addBounceSinceTurnStart();
     collisionSound.play();
   });
   collisionSound.addEventListener('ended', function() { collisionSound.load(); });
 
 
-  pongBall.position.set(0,30,0)
   pongBall.castShadow = true;
   scene.add(pongBall);
 

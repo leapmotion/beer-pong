@@ -202,6 +202,9 @@
 
 
     if (leapHand.pinchStrength > 0.5) {
+      if (!pongBall.inHand) {
+        pongBall.bouncesSinceTurnStart = 0;
+      }
       var finger1 = leapHand.indexFinger.tipPosition;
       var finger2 = leapHand.thumb.tipPosition;
       // may need to use constraints for this

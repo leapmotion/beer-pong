@@ -65,3 +65,9 @@ div {
   font-weight: bold; }
   div img {
     width: 30px; }
+
+#begin-game {
+  position: relative;
+  z-index: 10;
+  color: white;
+  font-size: 13pt; }

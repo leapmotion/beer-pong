@@ -8,7 +8,8 @@
     this.options = options;
     this.index = options.index;
     this.side = options.side; // 1 or -1
-    this.score = 0;
+    this.handOffset = options.handOffset;
+    this.handQuaternion = options.handQuaternion;
 
     if (this.side == 'far'){
       this.rotation = new THREE.Vector3(-1, 1, -1)
@@ -27,7 +28,6 @@
 
   window.Player.prototype.placementNoise = function () {
     return 0;
-//    return this.drunkeness * (Math.random() - 0);
   }
 
   Player.prototype.setCamera = function(){
@@ -46,20 +46,27 @@
     cupTop.quaternion.setFromEuler(new THREE.Euler(Math.PI/2, 0, 0, 'XYZ')); 
     cupBeer.quaternion.setFromEuler(new THREE.Euler(-Math.PI/2, 0, 0, 'XYZ')); 
     cylinder.addEventListener('collision', function(o, velocity) {
-      if (cylinder.position.y + cylinder.geometry.height/2 < o.position.y && cylinder.position.distanceTo(o.position) < 4.65) {
+      pongBall.addBounceSinceTurnStart();
+      if (cylinder.position.y + cylinder.geometry.height/2 < o.position.y && cylinder.position.distanceTo(o.position) < 5.21) {
+        var cylinderIndex = player.cups.indexOf(cylinder);
+        if (cylinderIndex > -1) {
+          player.cups.splice(cylinderIndex, 1);
+        }
         scene.remove(cylinder);
         pongBall.setLinearVelocity({x:0,y:0,z:0});
-        $('#player' + player.index + 'cups').append('<img src="images/cup.png?2">');
+        $('#player' + player.index + 'cups').append('<img src="images/cup.png">');
         if (cylinder.position.z > 0) {
-          player.score++;
           boo.play();
-          if (player.score >= player.cups.length) {
-            Game.overlay('You lose');
+          if (player.cups.length === 0) {
+            Game.overlay('You lose', function() {
+              Game.reset();
+            });
           }
         } else {
-          player.score++;
-          if (player.score >= player.cups.length) {
-            Game.overlay('You win');
+          if (player.cups.length === 0) {
+            Game.overlay('You win', function() {
+              Game.reset();
+            });
           }
           applaudeSound.play();
         }
@@ -95,11 +102,11 @@
   var cupPlacementDistance = 6;
 
   Player.prototype.rightwardCupOffset = function () {
-    return new THREE.Vector3(Game.cupPlacementDistance  + this.placementNoise(), 0, 0).multiply(this.rotation);
+    return new THREE.Vector3(Game.cupPlacementDistance, 0, 0).multiply(this.rotation);
   }
 
   Player.prototype.downwardCupOffset = function () {
-    return new THREE.Vector3(0, 0, Game.cupPlacementDistance+ this.placementNoise()).multiply(this.rotation);
+    return new THREE.Vector3(0, 0, Game.cupPlacementDistance).multiply(this.rotation);
   }
 
   Player.prototype.lastCup = function () {
@@ -132,10 +139,12 @@
   }
 
   Player.prototype.resetCups = function () {
-    // assume 6-cup
-//    this.sixCupFormation()
-    this.tenCupFormation()
-//    this.ibeamFormation()
+    $('#player' + this.index + 'cups').html('');
+    this.cups.forEach(function(e) {
+      scene.remove(e);
+    });
+    this.cups = [];
+    this.tenCupFormation();
   }
 
 
