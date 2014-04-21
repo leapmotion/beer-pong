@@ -1,4 +1,7 @@
 (function(){
+  // this also appears to set the ammojs relative path:
+  Physijs.scripts.worker = 'javascripts/lib/physijs_worker.js';
+
   scene = new Physijs.Scene();
   scene.setGravity({x: 0, y: -80, z: 0});
   scene.addEventListener(
@@ -140,7 +143,6 @@
   scene.add(pongBall);
 
 
-  var geometry = new THREE.SphereGeometry( 100, 32, 16 );
   var cubemap = window.location.href.charCodeAt(window.location.href.length-1) % 2 === 0 ? 'beach' : 'tenerife';
   var path = "textures/"+cubemap+"/";
   var format = '.jpg';
