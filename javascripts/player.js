@@ -55,7 +55,7 @@
 
         scene.remove(cylinder);
         pongBall.setLinearVelocity({x:0,y:0,z:0});
-        $('#player' + player.index + 'cups').append('<img src="images/cup.png">');
+        $('#player' + player.index + ' .cups').append('<img src="images/cup.png">');
         if (cylinder.position.z > 0) {
           boo.play();
           if (player.cups.length === 0) {
@@ -140,7 +140,7 @@
   }
 
   Player.prototype.resetCups = function () {
-    $('#player' + this.index + 'cups').html('');
+    $('#player' + this.index + ' .cups').html('');
     this.cups.forEach(function(e) {
       scene.remove(e);
     });
