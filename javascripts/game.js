@@ -4,6 +4,9 @@
   // $('.wikitable tr td:nth-child(2)').text().replace(/\(create\)/g, '').split("\n")[0]
   var playerNames = [" Free Speech ", " Orbital Mechanics ", " Airplane Message ", " Heartbleed Explanation ", " Heartbleed ", " Cosmologist on a Tire Swing ", " Metamaterials ", " Lorenz ", " Shouldn't Be Hard ", " Before the Internet ", " t Distribution ", " Career ", " Answers ", " Digits ", " Manuals ", " Ancient Stars ", " Types of Editors ", " Unique Date ", " When You Assume ", " Land Mammals ", " Hack ", " Transformers ", " Now ", " Second ", " First Date ", " Slippery Slope ", " Frequency ", " Kola Borehole ", " Standing ", " Update ", " Mobile Marketing ", " Sharks ", " Rejection ", " Weather ", " Protocol ", " Winter ", " Cold ", " Walmart ", " Automation ", " Actually ", " Theft ", " Inexplicable ", " Questions for God ", " Photos ", " Regex Golf ", " Haskell ", " 2014 ", " Goldbach Conjectures ", " Infinite Scrolling ", " Christmas Lights ", " Buzzfeed Christmas ", " Sigil Cycle ", " Undocumented Feature ", " Glass Trolling ", " Profile Info ", " Year in Review ", " File Extensions ", " Galilean Moons ", " I Don't Own a TV ", " Exoplanet Neighborhood ", " Oort Cloud ", " Git Commit ", " New Study ", " Telescope Names ", " Job Interview ", " Pi vs. Tau ", " Shoot for the Moon ", " Syllable Planning ", " Simple Answers ", " Substitutions ", " Puzzle ", " Encryptic ", " Third Way ", " Improved Keyboard ", " Headlines ", " Monty Hall ", " Minifigs ", " Mystery News ", " Reverse Identity Theft ", " Giraffes ", " Ayn Random ", " Angular Size ", " int(pi) ", " Open Letter ", " Tall Infographics ", " Shadowfacts ", " Highlighting ", " Functional ", " Privacy Opinions ", " Alternate Universe ", " Mess ", " Halting Problem ", " Juicer ", " Slideshow ", " Reassuring ", " Unquote ", " Shake That ", " LD50 ", " Bee Orchid ", " First ", " Monster ", " Questions ", " Columbus ", " Preferred Chat System ", " Exoplanet Names ", " Increased Risk ", " Anti-Glass ", " Old Accounts ", " Meteor Showers ", " Sphere ", " The Mother of All Suspicious Files ", " Pale Blue Dot ", " 10-Day Forecast ", " Six Words ", " Snare ", " Scary Names ", " Annoying Ringtone Champion ", " Quantum Mechanics ", " Social Media ", " Enlightenment ", " QR Code ", " Seashell ", " Settled ", " Douglas Engelbart (1925-2013) ", " Relativity ", " Realistic Criteria ", " Habitable Zone ", " Polar/Cartesian ", " Screensaver ", " Prometheus ", " The Pace of Modern Life ", " Balloon Internet ", " Ice Sheets ", " Council of 300 ", " Dwarf Fortress ", " Pastime ", " Nomenclature ", " Hipsters ", " Reports ", " Doors of Durin ", " Cells ", " Sticks and Stones ", " Insight ", " Geoguessr ", " Combination Vision Test ", " Interstellar Memes ", " Birds and Dinosaurs ", " I'm So Random ", " Encoding ", " Footnote Labyrinths ", " AirAware ", " Einstein ", " Is It Worth the Time? ", " Detail ", " Time Machines ", " Girls and Boys ", " Integration by Parts ", " Authorization ", " Silence ", " Geologist ", " All Adobe Updates ", " Subways ", " Flowchart ", " Stratigraphic Record ", " Externalities ", " Humming ", " The Past ", " Time ", " Voyager 1 ", " Bonding ", " Aspect Ratio ", " Bumblebees ", " Ineffective Sorts ", " Circumference Formula ", " Rose Petals ", " Rembrandt Photo ", " PGP ", " Virus Venn Diagram ", " ISO 8601 ", " Pickup Artists ", " Time Robot ", " Those Not Present ", " Moving Sidewalks ", " App ", " Steroids ", " Workflow ", " Perl Problems ", " Bridge ", " Expedition ", " tar ", " Star Trek into Darkness ", " Argument ", " Amazon ", " Home Alone ", " Debugger ", " Log Scale ", " Hand Sanitizer ", " Drop Those Pounds ", " Countdown ", " Rubber Sheet ", " Sick Day ", " Conditioning ", " Kolmogorov Directions ", " Resolution ", " Proof ", " Communion ", " Tests ", " Instagram ", " Broomstick ", " Nothing to Offer ", " Evolving ", " Honest ", " Sky Color ", " Tags ", " Location ", " Coverage ", " Two Years ", " Calendar of Meaningful Dates ", " Rubber and Glue ", " Heatmap ", " RTL ", " Broken Mirror ", " Arachnoneurology ", " Logic Boat ", " Up Goer Five ", " Frequentists vs. Bayesians ", " Math ", " Poll Watching ", " Cell Number ", " Fifty Shades ", " Congress ", " Epsilon and Zeta ", " Objects In Mirror ", " Law of Drama ", " The Universal Label ", " Electoral Precedent ", " Identity ", " Blurring the Line ", " Undoing ", " Microsoft ", " My Sky ", " Traffic Lights ", " Sky ", " Metallurgy ", " Killed in Action ", " Think Logically ", " Premiere ", " Click and Drag ", " Refrigerator ", " Cautionary Ghost ", " Sports Cheat Sheet ", " ADD ", " License Plate ", " Feathers ", " Nine ", " Fastest-Growing ", " Sketchiness ", " Vows ", " Tuesdays ", " Star Ratings ", " A Hypochondriac's Nightmare ", " Clinically Studied Ingredient ", " Crazy Straws ", " Interview ", " Forget ", " Michael Phelps ", " Curiosity ", " Formal Languages ", " Internal Monologue ", " Five Years ", " Cirith Ungol ", " Eyelash Wish Log ", " ContextBot ", " Server Problem ", " Writing Styles ", " Geology ", " Argument Victory ", " Visual Field ", " United Shapes ", " Knights ", " Home Organization ", " Groundhog Day ", " Warning ", " Moon Landing ", " Weekend ", " Seventies ", " Exoplanets ", " Words for Small Sets ", " Alphabet ", " Swiftkey ", " Pressures ", " Laundry ", " Shoes ", " Front Door ", " Kill Hitler ", " Budget News ", " EST ", " Crowdsourcing ", " Bel-Air ", " Old-Timers ", " Klout ", " Felidae ", " Kickstarter ", " The bacon ", " Ten Thousand ", " Every Major's Terrible ", " Visited ", " Forgot Algebra ", " Bookshelf ", " Emotion ", " Approximations ", " Skynet ", " Constraints ", " Romney Quiz ", " Ablogalypse ", " Never ", " Whites of Their Eyes ", " Lakes and Oceans ", " RuBisCO ", " Fountain ", " Umwelt ", " Reviews ", " Cadbury Eggs ", " Share Buttons ", " Formal Logic ", " Networking ", " s/keyboard/leopard/ ", " Keyed ", " Drawing Stars ", " Communication ", " Pickup Artist ", " Compare and Contrast ", " Tumblr ", " Error Code ", " Late-Night PBS ", " So It Has Come To This ", " Business Plan ", " Orion Nebula ", " First Post ", " Good Cop, Dadaist Cop ", " Backward in Time ", " Valentine Dilemma ", " Kerning ", " Car Problems ", " Wake Up Sheeple ", " Wrong Superhero ", " Baby Names ", " Etymology-Man ", " Sigh ", " Suckville ", " Sustainable ", " Sloppier Than Fiction ", " SOPA ", " Batman ", " Adam and Eve ", " Game AIs ", " AAAAAA ", ""]
 
+  var latencyHud = document.getElementById('latencyHud');
+  var incomingFPSHud = document.getElementById('incomingFPSHud');
+
   window.Game = {};
   var cupRadius = 3;
 
@@ -20,13 +23,22 @@
 
   Game.player1 = new Player({
     side: 'near',
-    index: 1
+    index: 1,
+    handOffset: (new THREE.Vector3(0, -3, 10)),
+    handQuaternion: new THREE.Quaternion
   });
 
   Game.player2 = new Player({
     side: 'far',
-    index: 2
+    index: 2,
+    handOffset: (new THREE.Vector3(-0, -3, -100)),
+    handQuaternion: (new THREE.Quaternion).setFromEuler(new THREE.Euler(0, Math.PI, 0))
   });
+
+  Game.getPlayerById = function(userId){
+    if (userId === this.player1.userId) return this.player1;
+    if (userId === this.player2.userId) return this.player2;
+  }
 
   Game.id = function () {
     return window.location.hash.split('#')[1];
@@ -43,7 +55,6 @@
   Game.gamesRef = window.firebase.child('games');
 
   Game.recentSentFrameRefs = [];
-  Game.mostRecentlySenfFrame = undefined;
 
   // firebase structure:
   // /game/<id>/players/<id>/frames
@@ -55,7 +66,7 @@
       this.gameRef.once('value', function (snapshot) {
         console.log('Connected to game ' + this.gameRef.name() + ', created:  ' + new Date(snapshot.val().created_at))
         Game.overlay('Welcome to the game! Pinch to control the ball.');
-        this.setupPlayers();
+        this.joinGame();
       }.bind(this));
     } else {
       // push appears to be synchronous. IDs are generated locally.
@@ -64,14 +75,16 @@
       Game.overlay('Share this URL to your date!');
       window.location.hash = '#' + this.gameRef.name();
 
-      this.setupPlayers();
+      this.joinGame();
     }
   }
 
-  Game.setupPlayers = function () {
+  Game.joinGame = function () {
     console.timeEnd('firebase-connection');
     // todo: hook name to session ID
-    this.playersRef = this.gameRef.child('players'); // will this be created automatically?
+    this.playersRef = this.gameRef.child('players');
+    // roles is a dictionary of role: userID.
+    this.rolesRef = this.gameRef.child('roles');
 
     // todo: hook this shit up with a player and a side
     var myName = playerNames[Math.floor(Math.random() * playerNames.length)].replace(/\s/g, '');
@@ -85,17 +98,51 @@
 
     console.log('Joining as', myName, '(' + this.userId + ')');
 
+
     this.playersRef.on('child_added', this.playerJoined);
 
-    // do cleanup here?
     this.currentUserRef.child('state').onDisconnect().set('disconnected');
 
     // this is pretty insecure.  One player should not be able to delete another..
-    this.currentUserRef.child('frames').onDisconnect().remove();
-
     this.framesRef = this.currentUserRef.child('frames');
-    console.log('ready to send frames!');
+    this.framesRef.onDisconnect().remove();
+
+    this.setRole();
   }
+
+  Game.setRole = function(){
+    this.rolesRef.transaction(function(roles){
+      roles || (roles = {});
+      if (!roles.player1){
+        roles.player1 = this.userId;
+      }
+      else if (!roles.player2){
+        roles.player2 = this.userId;
+      }
+      return roles;
+    }.bind(this),
+    function(error, committed, snapshot){
+      if (!committed) return;
+      var val = snapshot.val();
+      this.player1.userId = val.player1;
+      this.player2.userId = val.player2;
+
+      // it would be neater to end the game here :-P
+      if (this.player1.userId == this.userId){
+        console.log("Assigned as player1");
+        this.currentUser = this.player1;
+        this.rolesRef.child('player1').onDisconnect().remove();
+      }
+      else if (this.player2.userId == this.userId){
+        console.log("Assigned as player2");
+        this.currentUser = this.player2;
+        this.rolesRef.child('player2').onDisconnect().remove();
+      }else{
+        console.log("Assigned role of observer")
+      }
+    }.bind(this));
+  }
+
 
   Game.playerJoined = function(snapshot){
     if (snapshot.val().state == 'disconnected') return;
@@ -151,14 +198,14 @@
       frame: {
         hands: frame.hands,
         pointables: frame.pointables,
-        timestamp: frame.timestamp,
+        localTime: (new Date).getTime(),
         id: frame.id,
-        currentFrameRate: frame.currentFrameRate
+        currentFrameRate: frame.currentFrameRate,
+        ballPosition: pongBall.position.toArray()
       }
     }
 
     this.recentSentFrameRefs.push(this.framesRef.push(frameData));
-    this.mostRecentlySenfFrame = frameData;
 
     // remove old frames from firebase
     if (this.recentSentFrameRefs.length > 10){
@@ -173,6 +220,10 @@
     Game.framesReceived++;
 
     var frameData = snapshot.val().frame;
+    var timeDifference = ((new Date).getTime() - frameData.localTime);
+    if (timeDifference > 1000) return;
+
+    latencyHud.innerHTML =  timeDifference + "ms";
 
     //    no leap or :
     //
@@ -186,6 +237,11 @@
     LeapHandler.addUserFrame(userId, frameData);
   }.bind(this);
 
+  // Copy physics from master user unless single player or player 1
+  Game.slavePhysics = function(){
+    if (!this.player2.userId) return false;
+    if (this.userId != this.player1.userId) return true;
+  }
 
   Game.begin = function () {
     this.connectToLiveGame();
