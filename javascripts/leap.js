@@ -214,6 +214,10 @@
       var finger1 = leapHand.indexFinger.tipPosition;
       var finger2 = leapHand.thumb.tipPosition;
       // may need to use constraints for this
+      Game.isMaster = true;
+      console.log(Game.isMaster);
+      pongBall.bounces = 0;
+
       pongBall.inHand = true;
       handMesh.scenePosition([(finger1[0]+finger2[0])/2, (finger1[1]+finger2[1])/2, (finger1[2]+finger2[2])/2], pongBall.position);
       pongBall.__dirtyPosition = true;
@@ -222,7 +226,7 @@
     } else {
       pongBall.inHand = false;
 
-      if (frame.ballPosition && Game.slavePhysics()){
+      if (frame.ballPosition && !Game.isMaster){
         pongBall.position.fromArray(frame.ballPosition)
         pongBall.__dirtyPosition = true;
       }else{

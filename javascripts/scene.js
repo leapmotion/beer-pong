@@ -166,10 +166,17 @@
   pongBall.setDamping(0.9,0.9);
   var collisionSound = document.getElementById('collision');
   scene.table.addEventListener('collision', function() {
+    // we should have a global Throw object. oh well.
     pongBall.addBounceSinceTurnStart();
     collisionSound.play();
   });
   collisionSound.addEventListener('ended', function() { collisionSound.load(); });
+  // start off with two bounces so that it can be grabbed immediately
+  pongBall.bounces = 2;
+
+  pongBall.inFlight = function(){
+    return this.getLinearVelocity.x > 0.001 && this.getLinearVelocity.y > 0.001 && this.getLinearVelocity.z > 0.001
+  }
 
 
   pongBall.castShadow = true;
@@ -186,7 +193,6 @@
   ];
 
   var textureCube = THREE.ImageUtils.loadTextureCube( urls );
-  var material = new THREE.MeshBasicMaterial( { color: 0xffffff, envMap: textureCube } );
 
   // Skybox
 
@@ -232,6 +238,10 @@
     if (pongBall.position.y < lostHeight && !pongBall.belowTable && !pongBall.inHand) {
       booSound.play();
       pongBall.belowTable = true;
+
+      // nobody controls the physics now
+      Game.isMaster = false;
+      console.log(Game.isMaster);
     } else if (pongBall.position.y >= lostHeight && pongBall.belowTable) {
       pongBall.belowTable = false;
     }

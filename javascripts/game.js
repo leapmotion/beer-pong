@@ -222,8 +222,11 @@
         localTime: (new Date).getTime(),
         id: frame.id,
         currentFrameRate: frame.currentFrameRate,
-        ballPosition: pongBall.position.toArray()
       }
+    }
+
+    if (Game.isMaster){
+      frameData.frame.ballPosition = pongBall.position.toArray();
     }
 
     this.recentSentFrameRefs.push(this.framesRef.push(frameData));
@@ -244,10 +247,10 @@
 
     var timeDifference = ((new Date).getTime() - frameData.localTime);
 
-    if (timeDifference > 10000) {
-      console.warn("dropping frame, " + timeDifference + "ms old");
-      return
-    }
+//    if (timeDifference > 10000) {
+//      console.warn("dropping frame, " + timeDifference + "ms old");
+//      return
+//    }
 
     latencyHud.innerHTML = timeDifference + "ms";
 
@@ -264,11 +267,29 @@
   }.bind(this);
 
   // Copy physics from master user unless single player or player 1
-  Game.slavePhysics = function(){
-    if (!this.player2.userId) return false;
-    if (this.userId != this.player1.userId) return true;
-    return false;
+//  Game.slavePhysics = function(){
+//    if (this.isMaster) return false;
+//    if (!this.player2.userId) return false;
+//    if (this.userId != this.player1.userId) return true;
+//    return false;
+//  }
+
+  // master player is whoever touched the ball last
+  Game.isMaster = false;
+
+  Game.canControllBall = function(){
+    if (pongBall.bounces > 1 || !pongBall.inFlight()) return true;
+
+    if (Game.isMaster){
+      // currently throwing
+      return pongBall.inHand
+    }else{
+      // anybody can pick it up
+      return pongBall.belowTable
+    }
   }
+
+
 
   Game.begin = function () {
     this.connectToLiveGame();

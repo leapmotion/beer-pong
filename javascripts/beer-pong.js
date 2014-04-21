@@ -16,10 +16,7 @@ booSound.addEventListener('ended', function() { booSound.load(); });
       // these numbers are hardcoded in raw leap-space, not sure how to convert easily yet
       var player = Game.getPlayerById(hand.userId);
       return (player && player.options.handOffset)    || Game.player1.options.handOffset;
-    }//,
-//    scale: function(hand){
-//      return new THREE.Vector3(2,2,2);
-//    }
+    }
   })
   .use('riggedHand', {
     parent: window.scene,
