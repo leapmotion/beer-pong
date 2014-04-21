@@ -66,6 +66,34 @@ video {
 }
 
 div {
+  &#main-menu {
+    margin-top: 150px;
+    z-index: 6;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+    img {
+      width: 300px;
+    }
+    .new-game {
+      margin-top: 50px;
+      .nonhover {
+        display:block;
+      }
+      .hover {
+        cursor: pointer;
+        display:none;
+      }
+      &:hover {
+        .nonhover {
+          display:none;
+        }
+        .hover {
+          display:block;
+        }
+      }
+    }
+  }
   position: relative;
   z-index: 3;
   color: white;
@@ -74,4 +102,10 @@ div {
   img {
     width: 30px;
   }
+}
+#begin-game {
+  position: relative;
+  z-index: 10;
+  color: white;
+  font-size: 13pt;
 }

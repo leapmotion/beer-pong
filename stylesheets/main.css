@@ -63,5 +63,30 @@ div {
   color: white;
   font-size: 13pt;
   font-weight: bold; }
+  div#main-menu {
+    margin-top: 150px;
+    z-index: 6;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px; }
+    div#main-menu img {
+      width: 300px; }
+    div#main-menu .new-game {
+      margin-top: 50px; }
+      div#main-menu .new-game .nonhover {
+        display: block; }
+      div#main-menu .new-game .hover {
+        cursor: pointer;
+        display: none; }
+      div#main-menu .new-game:hover .nonhover {
+        display: none; }
+      div#main-menu .new-game:hover .hover {
+        display: block; }
   div img {
     width: 30px; }
+
+#begin-game {
+  position: relative;
+  z-index: 10;
+  color: white;
+  font-size: 13pt; }

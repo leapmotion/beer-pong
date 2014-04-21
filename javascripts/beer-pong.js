@@ -61,6 +61,13 @@ controller.on('disconnect',         function(){ LeapHandler.streamingLocalFrames
 controller.on('deviceDisconnected', function(){ LeapHandler.streamingLocalFrames = false; LeapHandler.updateSharedFramesLoop(); });
 
 LeapHandler.playback = controller.plugins.playback.player;
+
+$('#new-game').click(function() {
+  $('#main-menu').hide();
+  $('#players').show();
+  Game.reset();
+});
+$('#players').hide();
 Game.begin();
 
 
