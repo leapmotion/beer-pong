@@ -32,6 +32,8 @@
     return window.location.hash.split('#')[1];
   }
 
+  Game.userId = 'player1';
+
 
   Game.framesSent = 0;
   Game.framesReceived = 0;
