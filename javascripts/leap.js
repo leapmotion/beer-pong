@@ -178,7 +178,7 @@
 
   LeapHandler.trackThrow = function(hand, mesh){
 
-    hand.velocity = hand.accumulate('palmVelocity', 20, function (historyTotal) {
+    hand.velocity = hand.accumulate('palmVelocity', 10, function (historyTotal) {
       var current = [0,0,0];
       historyTotal.push(hand.palmVelocity);
       for (var i = 0; i<historyTotal.length; i++) {

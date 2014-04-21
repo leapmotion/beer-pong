@@ -54,13 +54,14 @@
       this.gameRef = this.gamesRef.child(this.id());
       this.gameRef.once('value', function (snapshot) {
         console.log('Connected to game ' + this.gameRef.name() + ', created:  ' + new Date(snapshot.val().created_at))
-
+        Game.overlay('Welcome to the game! Pinch to control the ball.');
         this.setupPlayers();
       }.bind(this));
     } else {
       // push appears to be synchronous. IDs are generated locally.
       this.gameRef = this.gamesRef.push({created_at: (new Date()).getTime()});
       console.log('Created game', this.gameRef.name());
+      Game.overlay('Share this URL to your date!');
       window.location.hash = '#' + this.gameRef.name();
 
       this.setupPlayers();
@@ -109,10 +110,10 @@
     });
 
     if (snapshot.name() == this.currentUserRef.name()) {
-//      $('#player2name').html(this.currentUserRef.val().name); // where's the player name??
+      $('#player2name').html(snapshot.val().name); // where's the player name??
       this.streamFrames = true;
     }else{
-//      $('#player1name').html(this.currentUserRef.val().name); // where's the player name??
+      $('#player1name').html(snapshot.val().name);
       this.watchPlayer(snapshot);
     }
   }.bind(Game);

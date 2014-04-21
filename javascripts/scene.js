@@ -42,6 +42,17 @@
   camera.lookAt(new THREE.Vector3(0, 0, 0));
   cameraCube = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 100000 );
 
+  var videoInput = document.getElementById('inputVideo');
+  var canvasInput = document.getElementById('inputCanvas');
+  if (/head/.test(window.location.href)) {
+    headtrackr.controllers.three.realisticAbsoluteCameraControl(camera, 1, [0, 80, 120], new THREE.Vector3(0, 0, 0));
+    // Face detection setup
+    var htracker = new headtrackr.Tracker({cameraOffset : 0});
+    htracker.init(videoInput, canvasInput);
+    htracker.start();
+  }
+
+
   window.addEventListener('resize', function() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();

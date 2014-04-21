@@ -57,6 +57,14 @@ body{
   left: 148px;
 }
 
+video {
+  position:  fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  opacity: 0.2;
+}
+
 div {
   position: relative;
   z-index: 3;
