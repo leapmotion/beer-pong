@@ -74,9 +74,11 @@ div {
     width: 300px;
     img {
       width: 300px;
+      &.logo {
+        margin-bottom: 30px;
+      }
     }
-    .new-game {
-      margin-top: 50px;
+    .button {
       .nonhover {
         display:block;
       }

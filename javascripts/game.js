@@ -71,7 +71,6 @@
       this.gameRef = this.gamesRef.child(this.id());
       this.gameRef.once('value', function (snapshot) {
         console.log('Connected to game ' + this.gameRef.name() + ', created:  ' + new Date(snapshot.val().created_at))
-        Game.overlay('Pinch to control the ball.');
         this.joinGame();
         Game.reset();
       }.bind(this));
@@ -79,7 +78,6 @@
       // push appears to be synchronous. IDs are generated locally.
       this.gameRef = this.gamesRef.push({created_at: (new Date()).getTime()});
       console.log('Created game', this.gameRef.name());
-      Game.overlay('Share this URL to your date!');
       window.location.hash = '#' + this.gameRef.name();
 
       this.joinGame();

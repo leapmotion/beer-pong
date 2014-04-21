@@ -62,10 +62,23 @@ controller.on('deviceDisconnected', function(){ LeapHandler.streamingLocalFrames
 
 LeapHandler.playback = controller.plugins.playback.player;
 
-$('#new-game').click(function() {
+var goToGame = function() {
   $('#main-menu').hide();
   $('#players').show();
   Game.reset();
+};
+$('#new-game').click(goToGame);
+$('#multiplayer').click(function() {
+  $('#main-menu .new-game').hide();
+  $('#main-menu')
+    .css('text-shadow', '-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black')
+    .css('color', '#f0a700')
+  .append('Share this URL with your date before selecting "Multiplayer".');
+  $('<input />').appendTo('#main-menu').val(window.location.href).css('width', '100%').click(function() {
+    $(this).focus().select();
+  });
+  $('#multiplayer').parent().remove().appendTo($('#main-menu'));
+  $('#multiplayer').click(goToGame);
 });
 $('#players').hide();
 Game.begin();
