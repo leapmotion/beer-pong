@@ -78,6 +78,8 @@
           return
         }
 
+        $('#main-menu').hide();
+        $('#players').show();
         console.log('Connected to game ' + this.gameRef.name() + ', created:  ' + new Date(snapshot.val().created_at))
         this.overlay('Pinch to control the ball.');
         this.joinGame();
