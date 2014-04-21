@@ -145,6 +145,7 @@
   );
   pongBall.reset = function() {
     pongBall.position.set(0,20,0);
+    pongBall.bouncesSinceTurnStart = 0;
     pongBall.mass = 0;
     pongBall.setLinearVelocity({x:0,y:0,z:0});
     pongBall.__dirtyPosition = true;
@@ -152,7 +153,7 @@
   pongBall.bouncesSinceTurnStart = 0;
   pongBall.addBounceSinceTurnStart = function() {
     this.bouncesSinceTurnStart++;
-    if (this.bouncesSinceTurnStart/2 > 1) {
+    if (this.bouncesSinceTurnStart > 1) {
       pongBall.reset();
       if (Game.turn === Game.player1) {
         Game.setTurn(Game.player2);
@@ -160,6 +161,7 @@
         Game.setTurn(Game.player1);
       }
     }
+    $('#turnBounces').html(this.bouncesSinceTurnStart);
   };
   pongBall.setDamping(0.9,0.9);
   var collisionSound = document.getElementById('collision');
