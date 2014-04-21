@@ -131,13 +131,15 @@
   // we merge two frames together, customizing as we go
   // IDs become ID + userId.  e.g., "60900
   LeapHandler.spliceInSharedFrames = function(frameData){
-    var i, hand, pointable, userFrame, userId; // no pointable support for now
+    var i, userFrame, userId; // no pointable support for now
+
 
 
     for (userId in this.userFrames){
       userFrame = this.userFrames[userId];
 
       if (userFrame.hands){ // not sure why
+
         for (i = 0; i < userFrame.hands.length; i++){
           frameData.hands.push(userFrame.hands[i]);
           userFrame.hands[i].fromFrameId = userFrame.id;

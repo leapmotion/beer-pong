@@ -240,8 +240,13 @@
     Game.framesReceived++;
 
     var frameData = snapshot.val().frame;
+
     var timeDifference = ((new Date).getTime() - frameData.localTime);
-    if (timeDifference > 1000) return;
+
+    if (timeDifference > 10000) {
+      console.warn("dropping frame, " + timeDifference + "ms old");
+      return
+    }
 
     latencyHud.innerHTML =  timeDifference + "ms";
 
