@@ -21,7 +21,14 @@ booSound.addEventListener('ended', function() { booSound.load(); });
   .use('riggedHand', {
     parent: window.scene,
     positionScale: 2.5,
-    scale: 1.5
+    scale: 1.5,
+    boneColors: function(){
+      return {
+        hue: 0.1,
+        saturation: 1,
+        lightness: 0.88
+      }
+    }
   })
   .use('accumulate')
   .connect()
