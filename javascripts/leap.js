@@ -158,9 +158,9 @@
       var current = [0,0,0];
       historyTotal.push(hand.palmVelocity);
       for (var i = 0; i<historyTotal.length; i++) {
-        current[0] += historyTotal[i][0] * 0.015;
-        current[1]  += historyTotal[i][1] * 0.015;
-        current[2]  += historyTotal[i][2] * 0.015;
+        current[0] += historyTotal[i][0] * 0.02;
+        current[1] += historyTotal[i][1] * 0.02;
+        current[2] += historyTotal[i][2] * 0.02;
       }
       return current;
     });
@@ -169,7 +169,7 @@
     if (hand.pinchStrength > 0.5) {
       // may need to use constraints for this
       pongBall.inHand = true;
-      pongBall.position.copy(mesh.position);
+      mesh.scenePosition(hand.indexFinger.tipPosition, pongBall.position);
       pongBall.__dirtyPosition = true;
       pongBall.setLinearVelocity({x: hand.velocity[0], y: hand.velocity[1], z: hand.velocity[2]});
     } else {
