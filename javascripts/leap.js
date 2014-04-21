@@ -169,7 +169,7 @@
     if (hand.pinchStrength > 0.5) {
       // may need to use constraints for this
       pongBall.inHand = true;
-      pongBall.position.copy(mesh.position);
+      mesh.scenePosition(hand.indexFinger.tipPosition, pongBall.position);
       pongBall.__dirtyPosition = true;
       pongBall.setLinearVelocity({x: hand.velocity[0], y: hand.velocity[1], z: hand.velocity[2]});
     } else {
