@@ -132,6 +132,8 @@
     console.log('Player ' + snapshot.val().name + ' has left the game');
     Game.playerCount--;
 
+    LeapHandler.clearUser(snapshot.name());
+
     this.playersRef.child(snapshot.name() + '/frames').off('child_added', Game.receiveFrame);
   }.bind(Game);
 

@@ -31,6 +31,11 @@
     this.userFrames[userId] = data;
   }
 
+  LeapHandler.clearUser = function(userId){
+    delete this.userFrames[userId];
+    console.log('user cleared', userId, this.userFrames);
+  }
+
 
   LeapHandler.enableFrameSharing = function () {
     if (this.frameSharingEnabled) return;
