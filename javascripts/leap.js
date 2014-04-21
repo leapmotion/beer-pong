@@ -184,13 +184,17 @@
 
 
     if (hand.pinchStrength > 0.5) {
+      var finger1 = hand.indexFinger.tipPosition;
+      var finger2 = hand.thumb.tipPosition;
       // may need to use constraints for this
       pongBall.inHand = true;
-      mesh.scenePosition(hand.indexFinger.tipPosition, pongBall.position);
+      mesh.scenePosition([(finger1[0]+finger2[0])/2, (finger1[1]+finger2[1])/2, (finger1[2]+finger2[2])/2], pongBall.position);
       pongBall.__dirtyPosition = true;
+      pongBall.mass = 0;
       pongBall.setLinearVelocity({x: hand.velocity[0], y: hand.velocity[1], z: hand.velocity[2]});
     } else {
       pongBall.inHand = false;
+      pongBall.mass = 1;
     }
 
   }

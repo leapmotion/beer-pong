@@ -3,7 +3,7 @@
   Physijs.scripts.worker = 'javascripts/lib/physijs_worker.js';
 
   scene = new Physijs.Scene();
-  scene.setGravity({x: 0, y: -80, z: 0});
+  scene.setGravity({x: 0, y: -100, z: 0});
   scene.addEventListener(
     'update',
     function() {
@@ -61,7 +61,7 @@
     new THREE.CubeGeometry(50, 1.8, 83),
     Physijs.createMaterial(new THREE.MeshPhongMaterial({
       color: 0x003000
-    }), 0.001, 0.99),
+    }), 0.01, 0.9),
     0
   );
   scene.table.receiveShadow = true;
@@ -128,9 +128,10 @@
   pongBall = new Physijs.SphereMesh(
     // function ( radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength ) {
     new THREE.SphereGeometry(1),
-    Physijs.createMaterial(new THREE.MeshPhongMaterial(0x0000ff), 0.000001, 0.9),
+    Physijs.createMaterial(new THREE.MeshPhongMaterial(0x0000ff), 1, 0.8),
     1
   );
+  pongBall.setDamping(0.9,0.9);
   var collisionSound = document.getElementById('collision');
   scene.table.addEventListener('collision', function() {
     collisionSound.play();
