@@ -36,10 +36,10 @@
   }
 
 
+  // This sorely needs proper LeapJS support
   LeapHandler.enableFrameSharing = function () {
     if (this.frameSharingEnabled) return;
     this.frameSharingEnabled = true;
-    // This sorely needs proper LeapJS support
 
     this.originalProtocol = window.controller.connection.protocol;
     window.controller.connection.protocol = this.shareFrameDataProtocol;
@@ -55,6 +55,9 @@
   // determines if a given set of local frame data is interesting and should be sent.
   LeapHandler.shouldSendFrame = function(localFrameData){
     if (Game.playerCount.length < 2) return false;
+
+    // ball position synchronized with frames
+    if (!pongBall.belowTable) return true;
 
     if (localFrameData.hands.length) return true;
 
@@ -111,7 +114,17 @@
     }
 
     LeapHandler.spliceInSharedFrames(localFrameData);
-    return new Leap.Frame(localFrameData);
+    return this.createFrame(localFrameData);
+  }
+
+  LeapHandler.createFrame = function(frameData){
+    var frame = new Leap.Frame(frameData);
+    frame.ballPosition = frameData.ballPosition;
+    for (var i = 0; i < frameData.hands.length; i++){
+      // assuming ordering is the same :-/
+      frame.hands[i].userId = frameData.hands[i].userId;
+    }
+    return frame;
   }
 
   // we merge two frames together, customizing as we go
@@ -131,10 +144,6 @@
         }
       }
 
-// Actually, we can't do that, because the local framerate is greater than the remote.
-//      // This is important as it means if one player stops sending frames,
-//      // they disappear:
-//      delete this.userFrames[userId];
     }
   }
 
@@ -154,7 +163,7 @@
       delete this.userFrames[userId];
       this.spliceInSharedFrames(frameData);
 
-      frame = new Leap.Frame(frameData);
+      frame = this.createFrame(frameData);
       console.log('observer loop. hands:', frame.hands.length);
 
       // send a deviceFrame to the controller:
@@ -176,11 +185,11 @@
   }
 
 
-  LeapHandler.trackThrow = function(hand, mesh){
+  LeapHandler.trackThrow = function(leapHand, handMesh, frame){
 
-    hand.velocity = hand.accumulate('palmVelocity', 20, function (historyTotal) {
+    leapHand.velocity = leapHand.accumulate('palmVelocity', 20, function (historyTotal) {
       var current = [0,0,0];
-      historyTotal.push(hand.palmVelocity);
+      historyTotal.push(leapHand.palmVelocity);
       for (var i = 0; i<historyTotal.length; i++) {
         current[0] += historyTotal[i][0] * 0.02;
         current[1] += historyTotal[i][1] * 0.02;
@@ -190,18 +199,25 @@
     });
 
 
-    if (hand.pinchStrength > 0.5) {
-      var finger1 = hand.indexFinger.tipPosition;
-      var finger2 = hand.thumb.tipPosition;
+    if (leapHand.pinchStrength > 0.5) {
+      var finger1 = leapHand.indexFinger.tipPosition;
+      var finger2 = leapHand.thumb.tipPosition;
       // may need to use constraints for this
       pongBall.inHand = true;
-      mesh.scenePosition([(finger1[0]+finger2[0])/2, (finger1[1]+finger2[1])/2, (finger1[2]+finger2[2])/2], pongBall.position);
+      handMesh.scenePosition([(finger1[0]+finger2[0])/2, (finger1[1]+finger2[1])/2, (finger1[2]+finger2[2])/2], pongBall.position);
       pongBall.__dirtyPosition = true;
       pongBall.mass = 0;
-      pongBall.setLinearVelocity({x: hand.velocity[0], y: hand.velocity[1], z: hand.velocity[2]});
+      pongBall.setLinearVelocity({x: leapHand.velocity[0], y: leapHand.velocity[1], z: leapHand.velocity[2]});
     } else {
       pongBall.inHand = false;
-      pongBall.mass = 1;
+
+      if (frame.ballPosition && Game.slavePhysics()){
+        console.log('s');
+        pongBall.position.fromArray(frame.ballPosition)
+      }else{
+        pongBall.mass = 1;
+      }
+
     }
 
   }

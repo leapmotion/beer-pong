@@ -6,11 +6,24 @@ var booSound = document.getElementById('boo');
 booSound.addEventListener('ended', function() { booSound.load(); });
 
 (window.controller = new Leap.Controller)
+  .use('transform', {
+    //
+//    quaternion: function(hand){
+//      var player = Game.getPlayerById(hand.userId);
+//      return player && player.handQuaternion;
+//    },
+//    offset: function(hand){
+//      var player = Game.getPlayerById(hand.userId);
+//      return player && player.handOffset;
+//    },
+//    scale: function(hand){
+//      return new THREE.Vector3(2,2,2);
+//    }
+  })
   .use('riggedHand', {
     parent: window.scene,
     positionScale: 2.5,
-    // assume right hand
-    offset: (new THREE.Vector3(0, 3, 10))
+    offset: new THREE.Vector3(0, 3, 10)
   })
   .use('accumulate')
   .connect()
@@ -33,7 +46,7 @@ booSound.addEventListener('ended', function() { booSound.load(); });
     hand = frame.hands[0];
     mesh = hand.data('riggedHand.mesh');
 
-    LeapHandler.trackThrow(hand, mesh);
+    LeapHandler.trackThrow(hand, mesh, frame);
     LeapHandler.updateHud(hand, mesh);
 
   });

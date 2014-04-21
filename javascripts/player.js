@@ -6,9 +6,10 @@
 
   window.Player = function (options) {
     this.index = options.index;
-    this.drunkeness = 0;
     this.side = options.side; // 1 or -1
     this.score = 0;
+    this.handOffset = options.handOffset;
+    this.handQuaternion = options.handQuaternion;
 
     if (this.side == 'far'){
       this.rotation = new THREE.Vector3(-1, 1, -1)
