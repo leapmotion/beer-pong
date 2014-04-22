@@ -279,7 +279,7 @@ var _sortBy = function (obj, iterator, context) {
       data = (new THREE.JSONLoader).parse(JSON);
       data.materials[0].skinning = true;
       data.materials[0].transparent = true;
-      data.materials[0].opacity = 1;
+      data.materials[0].opacity = 0.7;
       data.materials[0].emissive.setHex(0x888888);
       data.materials[0].vertexColors = THREE.VertexColors;
       data.materials[0].depthTest = true;
@@ -381,7 +381,8 @@ var _sortBy = function (obj, iterator, context) {
         rigFinger.tip.positionLeap = new THREE.Vector3;
       }
       palm.worldDirection = new THREE.Vector3;
-      return palm.worldQuaternion = handMesh.quaternion;
+      palm.worldQuaternion = handMesh.quaternion;
+      return controller.emit('riggedHand.meshAdded', handMesh, leapHand);
     };
     removeMesh = function(leapHand) {
       var handMesh;
@@ -392,6 +393,7 @@ var _sortBy = function (obj, iterator, context) {
           return document.body.removeChild(handMesh.boneLabels[bone.id]);
         });
       }
+      controller.emit('riggedHand.meshRemoved', handMesh, leapHand);
       if (scope.renderFn) {
         return scope.renderFn();
       }
