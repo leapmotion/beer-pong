@@ -17,7 +17,7 @@
   Game.cupBottomGeometry = new THREE.CylinderGeometry(cupRadius * 0.8, cupRadius * 0.8, cupRadius * 0.4, 32, true);
   Game.cupTopGeometry = new THREE.TorusGeometry(cupRadius, cupRadius*0.07, 32, 32, Math.PI*2);
   Game.cupBeerGeometry = new THREE.CircleGeometry(cupRadius, 32);
-  Game.cupMaterial = Physijs.createMaterial(new THREE.MeshPhongMaterial({color: 0xff0000}), 1, 0);
+  Game.cupMaterial = Physijs.createMaterial(new THREE.MeshPhongMaterial({color: 0xff0000}), 1, 0.9);
   Game.whiteMaterial = new THREE.MeshPhongMaterial({color: 0xffffff});
   Game.beerMaterial = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture('beer.jpg')});
 
