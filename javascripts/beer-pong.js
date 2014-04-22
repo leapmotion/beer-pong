@@ -72,6 +72,11 @@ booSound.addEventListener('ended', function() { booSound.load(); });
 
   });
 
+controller.on('riggedHand.meshAdded', function(handMesh, leapHand){
+  handMesh.material.opacity = 1;
+});
+
+
 // give a second to connect before immediately starting shared-frame-watching
 setTimeout(function () {
   LeapHandler.updateSharedFramesLoop();
