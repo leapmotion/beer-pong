@@ -288,7 +288,7 @@
 
 
   Game.begin = function () {
-    this.connectToLiveGame();
+//    this.connectToLiveGame();
     Game.reset();
     window.render();
   };
