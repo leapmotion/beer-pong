@@ -4,7 +4,6 @@
     <title>Beer Pong</title>
     <link rel="stylesheet" href="stylesheets/main.css"/>
     <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap.min.css"/>
-    <script src="javascripts/lib/headtrackr.js"></script>
   </head>
   <body>
     <div class="container" id="main-menu">
@@ -91,30 +90,27 @@
     <audio id="applaude" preload="auto"><source src="audio/applaude.ogg" /></audio>
 
     <!--<script type='text/javascript' src='https://cdn.firebase.com/js/client/1.0.11/firebase.js'></script>-->
-    <script type='text/javascript' src='javascripts/lib/jquery.phono.min.js'></script>
     <script type='text/javascript' src='https://cdn.firebase.com/js/simple-login/1.3.2/firebase-simple-login.js'></script>
     <script type='text/javascript' src='javascripts/lib/firebase-debug.js'></script>
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="javascripts/lib/three.js"></script>
+
+    <!--FIXME: THREE.js r67+ messes up cup placement -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r66/three.min.js"></script>
 
     <script type="text/javascript" src="javascripts/lib/physi.js"></script>
 
     <!-- cannon demo deps -->
     <script type="text/javascript" src="javascripts/lib/THREE.colorutils.js"></script>
-    <script type="text/javascript" src="javascripts/lib/Detector.js"></script>
 
     <script type="text/javascript" src="javascripts/lib/dat.gui.js"></script>
-    <!-- todo: replace these with something leap-enabled! -->
     <script type="text/javascript" src="javascripts/lib/TrackballControls.js"></script>
-    <!-- todo: use skeletal beta2 -->
-    <!-- includes fixed `use` with fingers -->
-    <script type="text/javascript" src="javascripts/lib/leap-0.6.0-beta1-custom.js"></script>
-    <!-- includes fixed hand data with fingers-->
-    <script type="text/javascript" src="javascripts/lib/leap-plugins-0.1.4.1-custom.js"></script>
-    <!--<script type="text/javascript" src="javascripts/lib/leap.playback-0.1.0.js"></script>-->
+
+    <script type="text/javascript" src="javascripts/lib/leap-0.6.1-protocolEvents.js"></script>
+    <script src="//js.leapmotion.com/leap-plugins-0.1.6.js"></script>
 
     <script type="text/javascript" src="javascripts/lib/leap.transform.js"></script>
-    <script type="text/javascript" src="javascripts/lib/leap.rigged-hand-0.1.0-custom.js"></script>
+    <script src="//js.leapmotion.com/leap.rigged-hand-0.1.4.js"></script>
+
     <script type="text/javascript" src="javascripts/leap.accumulate.js"></script>
     <script type="text/javascript" src="javascripts/auth.js"></script>
     <script type="text/javascript" src="javascripts/scene.js"></script>
